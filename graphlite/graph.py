@@ -23,6 +23,9 @@ class Graph(object):
                     cursor.execute(index % (item))
             self.db.commit()
 
+    def close(self):
+        self.db.close()
+
     def store(self, edge):
         with closing(self.db.cursor()) as cursor:
             cursor.execute(*SQL.store(edge.src, edge.rel, edge.dst))
