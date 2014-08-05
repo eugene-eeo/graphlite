@@ -19,6 +19,13 @@ class V(object):
         self.dst = dst
         return self
 
+    def __repr__(self):
+        return '(%s)-[%s]->(%s)' % (
+            '*' if self.src is None else self.src,
+            '*' if self.rel is None else ':%s' % (self.rel),
+            '*' if self.dst is None else self.dst
+        )
+
 
 class Query(object):
     def __init__(self, db):

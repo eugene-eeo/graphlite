@@ -67,6 +67,10 @@ class Graph(object):
 
     def exists(self, edge):
         """
+        Checks if an edge exists within the database with
+        the given source and destination nodes.
+
+        :param edge: The edge to query.
         """
         with closing(self.db.cursor()) as cursor:
             cursor.execute(*SQL.select_one(edge.src, edge.rel, edge.dst))
@@ -74,4 +78,7 @@ class Graph(object):
 
     @property
     def find(self):
+        """
+        Returns a Query object.
+        """
         return Query(self.db)
