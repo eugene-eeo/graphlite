@@ -78,3 +78,7 @@ class Query(object):
 
     def count(self):
         return sum(1 for __ in self)
+
+    def limit(self, count):
+        self.sql.append('LIMIT %d' % (count))
+        return self

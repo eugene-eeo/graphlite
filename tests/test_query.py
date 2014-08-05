@@ -31,3 +31,7 @@ def test_traverse(graph):
 def test_count(graph):
     assert graph.find(V(1).knows).count() == 3
     assert graph.find(V(1).likes).count() == 2
+
+
+def test_limit(graph):
+    assert len(list(graph.find(V(1).knows).limit(1))) == 1
