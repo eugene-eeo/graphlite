@@ -6,7 +6,7 @@ a backend. Graphlite provides storage for nodes- unsigned
 integers that represent objects in another datastore, for
 example the ID of your users and their posts.
 
-```python
+```
 from graphlite import Graph, V
 g = Graph(uri=':memory:', graphs=['follows'])
 
@@ -18,6 +18,8 @@ for item in g.find(V(1).knows):
     print('1 follows %d' % (item))
 
 g.find(V(1).knows).traverse(V().knows)
+g.delete(V(1).knows)
+g.close()
 ```
 
 The relations, when stored in the SQLite database, are not
