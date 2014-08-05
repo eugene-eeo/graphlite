@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Graphlite by eugene-eeo</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Graphlite</h1>
+        <p>embedded graph datastore</p>
+
+        <p class="view"><a href="https://github.com/eugene-eeo/graphlite">View the Project on GitHub <small>eugene-eeo/graphlite</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/eugene-eeo/graphlite/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/eugene-eeo/graphlite/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/eugene-eeo/graphlite">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p><img src="https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png" alt="graphlite"></p>
+
+<p><img src="https://travis-ci.org/eugene-eeo/graphlite.svg?branch=master" alt="Build Stats"></p>
+
+<p>A simple social graph datastore using the SQLite library as
+a backend. Graphlite provides storage for nodes- unsigned
+integers that represent objects in another datastore, for
+example the ID of your users and their posts.</p>
+
+<pre><code>from graphlite import Graph, V
+g = Graph(uri=':memory:', graphs=['follows'])
+
+g.store(V(1).knows(2))
+g.store(V(1).knows(3))
+g.store(V(2).knows(4))
+</code></pre>
+
+<p>The relations, when stored in the SQLite database, are not
+indexed by their recency or any time based value, but rather
+by either the source or destination nodes. All queries are
+performed using these clustered indexes as well.</p>
+
+<p>Graphlite aims to be performant and sane, as well as offering
+a nice API for developers to work with. I also aim for the
+library being thread-safe. Being inspired by FlockDB, Graphlite
+supports both simple and compound arithmetic queries:</p>
+
+<pre><code>g.find(V(1).knows)
+g.find(V(1).knows).intersection(...)
+g.find(V(1).knows).difference(...)
+g.find(V(1).knows).union(...)
+</code></pre>
+
+<p>They are pretty self explanatory. You can use them to simulate
+graph traversal, although for some edge cases you may need the
+slower <code>traverse</code> method:</p>
+
+<pre><code>g.find(V(1).knows).traverse(V().knows)
+</code></pre>
+
+<p>I.e. for unavoidable situations to find out who does the people
+that 1 know, know.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/eugene-eeo">eugene-eeo</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
