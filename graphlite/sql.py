@@ -14,11 +14,28 @@ INDEXES = (
 
 
 def store(src, rel, dst):
+    """
+    Returns an SQL statement to store an edge into
+    the SQL backing store.
+
+    :param src: The source node.
+    :param rel: The relation.
+    :param dst: The destination node.
+    """
     smt = 'INSERT INTO %s (src, dst) VALUES (?, ?)'
     return (smt % (rel)), (src, dst)
 
 
 def remove(src, rel, dst):
+    """
+    Returns an SQL statement that removes edges from
+    the SQL backing store. Either `src` or `dst` may
+    be specified, even both.
+
+    :param src: The source node.
+    :param rel: The relation.
+    :param dst: The destination node.
+    """
     smt = 'DELETE FROM %s' % (rel)
     queries = []
     params = []
@@ -35,13 +52,13 @@ def remove(src, rel, dst):
 
 
 def forwards_relation(src, rel):
-    statement = 'SELECT dst FROM %s WHERE src = ?' % (rel)
-    return statement, (src,)
+    statement = 'SELECT dst FROM %s WHERE src = ?'
+    return statement % (rel), (src,)
 
 
 def inverse_relation(dst, rel):
-    statement = 'SELECT src FROM %s WHERE dst = ?' % (rel)
-    return statement, (dst,)
+    statement = 'SELECT src FROM %s WHERE dst = ?'
+    return statement % (rel), (dst,)
 
 
 def select_one(src, rel, dst):
