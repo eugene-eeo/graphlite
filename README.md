@@ -1,5 +1,4 @@
-graphlite
-=========
+![graphlite](https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png)
 
 ![Build Stats](https://travis-ci.org/eugene-eeo/graphlite.svg?branch=master)
 
