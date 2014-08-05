@@ -1,4 +1,5 @@
 from contextlib import closing
+from itertools import islice
 import graphlite.sql as SQL
 
 
@@ -46,9 +47,9 @@ class V(object):
     def __eq__(self, other):
         if not isinstance(other, V):
             return False
-        return self.src == other.src and \
-               self.rel == other.rel and \
-               self.dst == other.dst
+        return (self.src == other.src and
+                self.rel == other.rel and
+                self.dst == other.dst)
 
     def __hash__(self):
         return hash((self.src, self.rel, self.dst))
@@ -154,11 +155,5 @@ class Query(object):
         """
         return sum(1 for __ in self)
 
-    def limit(self, count):
-        """
-        Limit the number of results via inserting
-        an SQL LIMIT clause to the internal SQL
-        quries.
-        """
-        self.sql.append('LIMIT %d' % (count))
-        return self
+    def __getitem__(self, value):
+        return islice(self, value.start, value.stop, value.step)

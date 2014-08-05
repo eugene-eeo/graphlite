@@ -33,5 +33,6 @@ def test_count(graph):
     assert graph.find(V(1).likes).count() == 2
 
 
-def test_limit(graph):
-    assert len(list(graph.find(V(1).knows).limit(1))) == 1
+def test_slice(graph):
+    assert len(list(graph.find(V(1).knows)[:1])) == 1
+    assert list(graph.find(V(1).knows)[1:]) == [3, 4]
