@@ -45,4 +45,10 @@ g.find(V(1).knows).traverse(...).traverse(...)
 ```
 
 I.e. for unavoidable situations to find out who does the people
-that 1 knows, know.
+that 1 knows, know. Like regular Python collections you can also
+slice the results, i.e.:
+
+```python
+g.find(V(1).knows)[2:10]
+g.find(V(3).knows)[1::2]
+```
