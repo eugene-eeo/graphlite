@@ -7,7 +7,7 @@ integers that represent objects in another datastore, for
 example the ID of your users and their posts.
 
 ```python
-from graplite import Graph, V
+from graphlite import Graph, V
 g = Graph(uri=':memory:', graphs=['follows'])
 
 g.store(V(1).knows(2))

@@ -41,6 +41,18 @@ class Query(object):
         )
         self.sql.append(statement)
         self.sql.extend(params)
+        return self
+
+    def traverse(self, edge):
+        query = '\n'.join(self.sql)
+        rel, dst = edge.rel, edge.dst
+        statement, params = (
+            SQL.compound_fw_query(rel, query) if dst is None else
+            SQL.compound_iv_query(dst, rel, query)
+        )
+        self.sql = [statement]
+        self.params.extend(params)
+        return self
 
     @property
     def intersection(self):
