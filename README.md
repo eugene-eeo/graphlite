@@ -1,6 +1,8 @@
 graphlite
 =========
 
+![Build Stats](https://travis-ci.org/eugene-eeo/graphlite.svg?branch=master)
+
 A simple social graph datastore using the SQLite library as
 a backend. Graphlite provides storage for nodes- unsigned
 integers that represent objects in another datastore, for

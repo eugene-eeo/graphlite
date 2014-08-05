@@ -26,3 +26,8 @@ def test_traverse(graph):
                      .traverse(V().knows)) == [1, 1]
     assert list(graph.find(V(1).knows)
                      .traverse(V().knows(1))) == [2, 3]
+
+
+def test_count(graph):
+    assert graph.find(V(1).knows).count() == 3
+    assert graph.find(V(1).likes).count() == 2

@@ -68,3 +68,6 @@ class Query(object):
     def union(self):
         self.sql.append('UNION')
         return self
+
+    def count(self):
+        return sum(1 for __ in self)
