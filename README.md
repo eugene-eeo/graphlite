@@ -14,13 +14,6 @@ g = Graph(uri=':memory:', graphs=['follows'])
 g.store(V(1).knows(2))
 g.store(V(1).knows(3))
 g.store(V(2).knows(4))
-
-for item in g.find(V(1).knows):
-    print('1 follows %d' % (item))
-
-g.find(V(1).knows).traverse(V().knows)
-g.delete(V(1).knows)
-g.close()
 ```
 
 The relations, when stored in the SQLite database, are not
@@ -30,4 +23,23 @@ performed using these clustered indexes as well.
 
 Graphlite aims to be performant and sane, as well as offering
 a nice API for developers to work with. I also aim for the
-library being thread-safe.
+library being thread-safe. Being inspired by FlockDB, Graphlite
+supports both simple and compound arithmetic queries:
+
+```
+g.find(V(1).knows)
+g.find(V(1).knows).intersection(...)
+g.find(V(1).knows).difference(...)
+g.find(V(1).knows).union(...)
+```
+
+They are pretty self explanatory. You can use them to simulate
+graph traversal, although for some edge cases you may need the
+slower `traverse` method:
+
+```
+g.find(V(1).knows).traverse(V().knows)
+```
+
+I.e. for unavoidable situations to find out who does the people
+that 1 know, know.
