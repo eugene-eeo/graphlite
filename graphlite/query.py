@@ -43,6 +43,14 @@ class V(object):
             '*' if self.dst is None else self.dst
         )
 
+    def __eq__(self, other):
+        return self.src == other.src and \
+               self.rel == other.rel and \
+               self.dst == other.dst
+
+    def __hash__(self):
+        return hash((self.src, self.rel, self.dst))
+
 
 class Query(object):
     """
@@ -70,8 +78,9 @@ class Query(object):
         node is specified in the edge query then the
         destination nodes will be selected, else the
         source nodes will be selected. Note that either
-        one of the source or destination nodes must be
-        specified in the edge query.
+        one of the source or destination nodes (but not
+        necessarily both) must be specified in the edge
+        query.
 
         :param edge: The edge query.
         """
