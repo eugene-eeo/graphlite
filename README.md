@@ -1,6 +1,8 @@
 ![graphlite](https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png)
 
+
 ![Build Stats](https://travis-ci.org/eugene-eeo/graphlite.svg?branch=master)
+
 ![License](http://img.shields.io/badge/license-MIT-red.svg)
 
 A simple social graph datastore using the SQLite library as
