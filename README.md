@@ -45,4 +45,4 @@ g.find(V(1).knows).traverse(...).traverse(...)
 ```
 
 I.e. for unavoidable situations to find out who does the people
-that 1 know, know.
+that 1 knows, know.
