@@ -2,12 +2,11 @@
 
 
 ![Build Stats](http://img.shields.io/travis/eugene-eeo/graphlite.svg)
-![License](http://img.shields.io/badge/license-MIT-red.svg)
 
-A simple social graph datastore using the SQLite library as
-a backend. Graphlite provides storage for nodes- unsigned
-integers that represent objects in another datastore, for
-example the ID of your users and their posts.
+A simple MIT-licensed social graph datastore using the SQLite
+library as a backend. Graphlite provides storage for nodes-
+unsigned integers that represent objects in another datastore,
+for example the ID of your users and their posts.
 
 ```python
 from graphlite import Graph, V

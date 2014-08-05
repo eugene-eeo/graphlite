@@ -3,19 +3,31 @@ import graphlite.sql as SQL
 
 
 class V(object):
+    __slots__ = ('src', 'rel', 'dst')
+
+    """
+    Create a new V object that represents an edge. This
+    object is expected throughout the API where the
+    parameter is named `edge`.
+    """
     def __init__(self, src=None, rel=None, dst=None):
         self.src = src
         self.rel = rel
         self.dst = dst
 
     def __getattr__(self, attr):
-        values = self.__dict__
+        values = self.__slots__
         if attr in values:
             return values[attr]
         self.rel = attr
         return self
 
     def __call__(self, dst):
+        """
+        Assign a destination node to the edge.
+
+        :param dst: The destination node.
+        """
         self.dst = dst
         return self
 
