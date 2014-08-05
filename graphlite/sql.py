@@ -52,25 +52,64 @@ def remove(src, rel, dst):
 
 
 def forwards_relation(src, rel):
+    """
+    Selects the destination nodes given a relation
+    and a source node.
+
+    :param src: The source node.
+    :param rel: The relation.
+    """
     statement = 'SELECT dst FROM %s WHERE src = ?'
     return statement % (rel), (src,)
 
 
 def inverse_relation(dst, rel):
+    """
+    Similar to :meth:``forwards_relation`` but selects
+    the source nodes instead, given a destination node.
+
+    :param dst: The destination node.
+    :param rel: The relation.
+    """
     statement = 'SELECT src FROM %s WHERE dst = ?'
     return statement % (rel), (dst,)
 
 
 def select_one(src, rel, dst):
+    """
+    Selects one ID from a relation table given a source
+    and destination node.
+
+    :param src: The source node.
+    :param rel: The relation.
+    :param dst: The destination node.
+    """
     smt = 'SELECT id FROM %s WHERE src = ? AND dst = ? LIMIT 1'
     return smt % (rel), (src, dst)
 
 
 def compound_fw_query(rel, query):
+    """
+    Create a compound forwards query that selects the
+    destination nodes, which have source nodes within
+    the subquery.
+
+    :param rel: The relation.
+    :param query: The subquery.
+    """
     smt = 'SELECT dst FROM %s WHERE src IN (%s)'
     return smt % (rel, query), tuple()
 
 
 def compound_iv_query(dst, rel, query):
+    """
+    Create a compound inverse query, similar to
+    :meth:``compound_fw_query`` but only selects
+    the source nodes given a destination node.
+
+    :param dst: The destination node.
+    :param rel: The relation.
+    :param query: The subquery.
+    """
     smt = 'SELECT src FROM %s WHERE src IN (%s) AND dst = ?'
     return smt % (rel, query), (dst,)
