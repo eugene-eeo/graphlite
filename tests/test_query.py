@@ -24,3 +24,5 @@ def test_difference(graph):
 def test_traverse(graph):
     assert list(graph.find(V(1).knows)
                      .traverse(V().knows)) == [1, 1]
+    assert list(graph.find(V(1).knows)
+                     .traverse(V().knows(1))) == [2, 3]
