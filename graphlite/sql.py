@@ -35,15 +35,25 @@ def remove(src, rel, dst):
 
 
 def forwards_relation(src, rel):
-    return 'SELECT dst FROM %s WHERE src = ?' % (rel), \
-           (src,)
+    statement = 'SELECT dst FROM %s WHERE src = ?' % (rel)
+    return statement, (src,)
 
 
 def inverse_relation(dst, rel):
-    return 'SELECT src FROM %s WHERE dst = ?' % (rel), \
-            (dst,)
+    statement = 'SELECT src FROM %s WHERE dst = ?' % (rel)
+    return statement, (dst,)
+
 
 def select_one(src, rel, dst):
     smt = 'SELECT id FROM %s WHERE src = ? AND dst = ? LIMIT 1'
     return smt % (rel), (src, dst)
 
+
+def compound_fw_query(rel, query):
+    smt = 'SELECT dst FROM %s WHERE src IN (%s)'
+    return smt % (rel, query), tuple()
+
+
+def compound_iv_query(dst, rel, query):
+    smt = 'SELECT src FROM %s WHERE src IN (%s) AND dst = ?'
+    return smt % (rel, query), (dst,)

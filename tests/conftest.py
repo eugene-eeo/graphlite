@@ -5,7 +5,7 @@ from graphlite import Graph, V
 @pytest.fixture
 def graph(request):
     g = Graph(uri=':memory:',
-              graphs=['likes','knows'])
+              graphs=['likes', 'knows'])
 
     for i in range(2, 5):
         g.store(V(1).knows(i))

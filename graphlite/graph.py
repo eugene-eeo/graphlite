@@ -43,4 +43,4 @@ class Graph(object):
 
     @property
     def find(self):
-        return Query(self)
+        return Query(self.db)

@@ -40,7 +40,7 @@ class Query(object):
             SQL.inverse_relation(dst, rel)
         )
         self.sql.append(statement)
-        self.sql.extend(params)
+        self.params.extend(params)
         return self
 
     def traverse(self, edge):
@@ -56,7 +56,7 @@ class Query(object):
 
     @property
     def intersection(self):
-        self.sql.append('INTERSECTION')
+        self.sql.append('INTERSECT')
         return self
 
     @property
