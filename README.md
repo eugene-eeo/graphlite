@@ -24,13 +24,14 @@ performed using these clustered indexes as well.
 Graphlite aims to be performant and sane, as well as offering
 a nice API for developers to work with. I also aim for the
 library being thread-safe. Being inspired by FlockDB, Graphlite
-supports both simple and compound arithmetic queries:
+supports both simple and compound arithmetic queries, as well
+as queries to forwards and backwards relations:
 
 ```python
 g.find(V(1).knows)
 g.find(V(1).knows).intersection(...)
 g.find(V(1).knows).difference(...)
-g.find(V(1).knows).union(...)
+g.find(V().knows(1)).union(...)
 ```
 
 They are pretty self explanatory. You can use them to simulate
