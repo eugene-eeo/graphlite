@@ -7,7 +7,7 @@ a backend. Graphlite provides storage for nodes- unsigned
 integers that represent objects in another datastore, for
 example the ID of your users and their posts.
 
-```
+```python
 from graphlite import Graph, V
 g = Graph(uri=':memory:', graphs=['follows'])
 
@@ -26,7 +26,7 @@ a nice API for developers to work with. I also aim for the
 library being thread-safe. Being inspired by FlockDB, Graphlite
 supports both simple and compound arithmetic queries:
 
-```
+```python
 g.find(V(1).knows)
 g.find(V(1).knows).intersection(...)
 g.find(V(1).knows).difference(...)
@@ -37,8 +37,9 @@ They are pretty self explanatory. You can use them to simulate
 graph traversal, although for some edge cases you may need the
 slower `traverse` method:
 
-```
+```python
 g.find(V(1).knows).traverse(V().knows)
+g.find(V(1).knows).traverse(...).traverse(...)
 ```
 
 I.e. for unavoidable situations to find out who does the people
