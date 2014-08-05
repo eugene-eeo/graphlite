@@ -44,6 +44,8 @@ class V(object):
         )
 
     def __eq__(self, other):
+        if not isinstance(other, V):
+            return False
         return self.src == other.src and \
                self.rel == other.rel and \
                self.dst == other.dst
