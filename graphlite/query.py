@@ -22,6 +22,14 @@ class V(object):
         self.dst = dst
 
     def __getattr__(self, attr):
+        """
+        If the attribute being requested is found in the
+        ``__slots__`` attribute, then return the actual
+        thing, else assign the attribute as an internally
+        stored relation.
+
+        :param attr: The attribute.
+        """
         values = self.__slots__
         if attr in values:
             return values[attr]
@@ -45,6 +53,13 @@ class V(object):
         )
 
     def __eq__(self, other):
+        """
+        Checks for equality between the edge and
+        another object- the other object needn't
+        be an edge.
+
+        :param other: The other thing.
+        """
         if not isinstance(other, V):
             return False
         return (self.src == other.src and
@@ -52,6 +67,11 @@ class V(object):
                 self.dst == other.dst)
 
     def __hash__(self):
+        """
+        Uses Python's tuple hashing algorithm to
+        hash the internal source, relation, and
+        destination nodes.
+        """
         return hash((self.src, self.rel, self.dst))
 
 
@@ -68,6 +88,12 @@ class Query(object):
         self.params = []
 
     def __iter__(self):
+        """
+        Execute the internally stored SQL query and then
+        yield every result to the caller. You can reuse
+        this function as many times as you want but it
+        is not deterministic.
+        """
         statement = '\n'.join(self.sql)
         with closing(self.db.cursor()) as cursor:
             cursor.execute(statement, self.params)
@@ -156,4 +182,10 @@ class Query(object):
         return sum(1 for __ in self)
 
     def __getitem__(self, value):
+        """
+        Only supports slicing operations, and returns
+        an iterable with the slice taken into account.
+
+        :param value: The slice object.
+        """
         return islice(self, value.start, value.stop, value.step)
