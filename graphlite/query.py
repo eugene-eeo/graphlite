@@ -49,7 +49,7 @@ class V(object):
         return '(%s)-[%s]->(%s)' % (
             '*' if self.src is None else self.src,
             '*' if self.rel is None else ':%s' % (self.rel),
-            '*' if self.dst is None else self.dst
+            '*' if self.dst is None else self.dst,
         )
 
     def __eq__(self, other):
@@ -82,10 +82,10 @@ class Query(object):
 
     :param db: The SQLite connection.
     """
-    def __init__(self, db):
+    def __init__(self, db, sql=tuple(), params=tuple()):
         self.db = db
-        self.sql = []
-        self.params = []
+        self.sql = sql
+        self.params = params
 
     def __iter__(self):
         """
@@ -99,6 +99,11 @@ class Query(object):
             cursor.execute(statement, self.params)
             for item in cursor:
                 yield item[0]
+
+    def derived(self, statement, params=tuple()):
+        return Query(db=self.db,
+                     sql=self.sql + (statement,),
+                     params=self.params + params)
 
     def __call__(self, edge):
         """
@@ -114,13 +119,10 @@ class Query(object):
         :param edge: The edge query.
         """
         src, rel, dst = edge.src, edge.rel, edge.dst
-        statement, params = (
+        return self.derived(*(
             SQL.forwards_relation(src, rel) if dst is None else
             SQL.inverse_relation(dst, rel)
-        )
-        self.sql.append(statement)
-        self.params.extend(params)
-        return self
+        ))
 
     def traverse(self, edge):
         """
@@ -139,9 +141,10 @@ class Query(object):
             SQL.compound_fw_query(rel, query) if dst is None else
             SQL.compound_iv_query(dst, rel, query)
         )
-        self.sql = [statement]
-        self.params.extend(params)
-        return self
+        instance = Query(self.db)
+        instance.sql = [statement]
+        instance.params = self.params + params
+        return instance
 
     @property
     def intersection(self):
@@ -149,8 +152,7 @@ class Query(object):
         Returns the Query object itself but inserts a
         SQL intersection keyword.
         """
-        self.sql.append('INTERSECT')
-        return self
+        return self.derived('INTERSECT')
 
     @property
     def difference(self):
@@ -159,8 +161,7 @@ class Query(object):
         method, but sets up the query object for an
         SQL ``EXCEPT`` query.
         """
-        self.sql.append('EXCEPT')
-        return self
+        return self.derived('EXCEPT')
 
     @property
     def union(self):
@@ -169,8 +170,7 @@ class Query(object):
         method and sets up the query object for a
         UNION query.
         """
-        self.sql.append('UNION')
-        return self
+        return self.derived('UNION')
 
     def count(self):
         """

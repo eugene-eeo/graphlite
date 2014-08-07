@@ -56,7 +56,10 @@ class Graph(object):
 
     def delete(self, edge):
         """
-        Deletes an edge from the database.
+        Deletes an edge from the database. Either the source
+        node or destination node may be specified- if they
+        are not then they won't be taken into account when
+        deleting from the relation.
 
         :param edge: The edge to delete.
         """
