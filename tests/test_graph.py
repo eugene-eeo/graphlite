@@ -10,34 +10,17 @@ def threading_test(function, iterable):
     [thread.join() for thread in threads]
 
 
-def test_store_multiple(graph):
-    edges = [V(1).knows(i) for i in range(5, 10)]
-    graph.store_multiple(edges)
+def test_delete_concurrent(graph):
+    nodes = list(graph.find(V(1).knows))
 
-    for item in edges:
-        assert item in graph
-
-    try:
-        graph.store_multiple([V(1).knows(11), V(1).do(2)])
-        raise AssertionError
-    except OperationalError:
-        assert V(1).knows(11) not in graph
-
-
-def test_concurrent_store_multiple():
-    g = Graph(uri=':memory:', graphs=['knows'])
-
-    def store(iterable):
+    def delete(value):
         def callback():
-            g.store_multiple(iterable)
+            graph.delete(V(1).knows(value))
         return callback
 
-    stored = ([V(1).knows(2), V(1).knows(5)], [V(1).knows(3), V(1).knows(4)])
-    threading_test(store, stored)
-
-    for item in stored:
-        for edge in item:
-            assert edge in g
+    threading_test(delete, nodes)
+    for item in nodes:
+        assert V(1).knows(item) not in graph
 
 
 def test_concurrency():

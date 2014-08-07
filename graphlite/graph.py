@@ -54,26 +54,6 @@ class Graph(object):
                 cursor.execute(*SQL.store(edge.src, edge.rel, edge.dst))
                 self.db.commit()
 
-    def store_multiple(self, edges):
-        """
-        Try to store multiple edges into the SQLite database.
-        This operation is atomic- writes do not take effect
-        if there is an error in writing the next one to the
-        backend.
-
-        :param edges: An iterable that yields edges.
-        """
-        with self.lock:
-            with closing(self.db.cursor()) as cursor:
-                try:
-                    cursor.execute('begin')
-                    for e in edges:
-                        cursor.execute(*SQL.store(e.src, e.rel, e.dst))
-                    cursor.execute('commit')
-                except:
-                    cursor.execute('rollback')
-                    raise
-
     def delete(self, edge):
         """
         Deletes an edge from the database. Either the source
