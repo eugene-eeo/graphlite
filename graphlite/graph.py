@@ -71,7 +71,7 @@ class Graph(object):
                         cursor.execute(*SQL.store(e.src, e.rel, e.dst))
                     self.db.commit()
                 except:
-                    cursor.execute('rollback')
+                    self.db.rollback()
                     raise
 
     def delete(self, edge):
