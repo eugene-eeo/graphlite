@@ -59,3 +59,10 @@ Sometimes just validating relations is what you want.
 if V(1).knows(2) in g:
     # HE HAS A FRIEND!
 ```
+
+If you are looking for a package that can scale up with SQLite
+and is simple to work with, while sane, then Graphlite is for
+you. Else I recommend you to start looking at various other
+libraries like [neomodel](https://github.com/robinedwards/neomodel),
+or the Python interface to the FlockDB database, if you are into
+adjacency lists: [python-flockdb](https://github.com/pyronicide/python-flockdb).
