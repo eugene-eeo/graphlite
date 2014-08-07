@@ -68,7 +68,7 @@ class Graph(object):
                 cursor.execute(*SQL.remove(edge.src, edge.rel, edge.dst))
                 self.db.commit()
 
-    def exists(self, edge):
+    def __contains__(self, edge):
         """
         Checks if an edge exists within the database with
         the given source and destination nodes.

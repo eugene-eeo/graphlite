@@ -52,3 +52,10 @@ slice the results, i.e.:
 g.find(V(1).knows)[2:10]
 g.find(V(3).knows)[1::2]
 ```
+
+Sometimes just validating relations is what you want.
+
+```python
+if V(1).knows(2) in g:
+    # HE HAS A FRIEND!
+```

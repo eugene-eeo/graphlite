@@ -17,27 +17,27 @@ def test_concurrency():
     [thread.join() for thread in threads]
 
     for item in stored:
-        assert g.exists(V(1).knows(item))
+        assert V(1).knows(item) in g
 
 
 def test_store(graph):
     graph.store(V(1).knows(10))
-    assert graph.exists(V(1).knows(10))
+    assert V(1).knows(10) in graph
 
 
-def test_exists(graph):
-    assert graph.exists(V(1).knows(2))
+def test_contains(graph):
+    assert V(1).knows(2) in graph
 
 
 def test_delete(graph):
     graph.delete(V(1).knows(4))
-    assert not graph.exists(V(1).knows(4))
+    assert not V(1).knows(4) in graph
 
     graph.delete(V().knows(2))
-    assert not graph.exists(V(1).knows(2))
+    assert not V(1).knows(2) in graph
 
     graph.delete(V().knows)
-    assert not graph.exists(V(1).knows(3))
+    assert not V(1).knows(3) in graph
 
 
 def test_close(graph):
