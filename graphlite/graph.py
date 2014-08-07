@@ -69,9 +69,9 @@ class Graph(object):
                     cursor.execute('begin')
                     for e in edges:
                         cursor.execute(*SQL.store(e.src, e.rel, e.dst))
-                    self.db.commit()
+                    cursor.execute('commit')
                 except:
-                    self.db.rollback()
+                    cursor.execute('rollback')
                     raise
 
     def delete(self, edge):
