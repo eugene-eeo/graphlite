@@ -12,9 +12,9 @@ for example the ID of your users and their posts.
 from graphlite import Graph, V
 g = Graph(uri=':memory:', graphs=['follows'])
 
-g.store(V(1).knows(2))
-g.store(V(1).knows(3))
-g.store(V(2).knows(4))
+with g.transaction() as tr:
+    for i in range(2, 5):
+        tr.store(V(1).knows(i))
 ```
 
 The relations, when stored in the SQLite database, are not
