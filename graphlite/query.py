@@ -101,6 +101,14 @@ class Query(object):
                 yield item[0]
 
     def derived(self, statement, params=tuple()):
+        """
+        Returns a new query object set up correctly with
+        the current query object's statements and parameters
+        appended to the start of the new one.
+
+        :param statement: The SQL statements to append.
+        :param params: The parameters to append.
+        """
         return Query(db=self.db,
                      sql=self.sql + (statement,),
                      params=self.params + params)
