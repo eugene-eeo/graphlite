@@ -1,6 +1,6 @@
 # <img src="https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png">
 
-[![Build](https://travis-ci.org/eugene-eeo/graphlite)](https://img.shields.io/travis/eugene-eeo/graphlite.svg)
+![Build](https://img.shields.io/travis/eugene-eeo/graphlite.svg)
 
 ### Relations, simplified
 
