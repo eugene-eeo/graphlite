@@ -1,4 +1,5 @@
 from graphlite import V
+from graphlite.transaction import AbortSignal
 from sqlite3 import OperationalError
 from threading import Thread
 
@@ -58,3 +59,11 @@ def test_delete(graph):
             tr.delete(query)
 
         assert assertion()
+
+
+def test_transaction_abort(graph):
+    with graph.transaction() as tr:
+        tr.store(V(1).knows(10))
+        tr.abort()
+
+    assert V(1).knows(10) not in graph
