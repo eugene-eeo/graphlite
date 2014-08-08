@@ -116,13 +116,9 @@ class Query(object):
     def __call__(self, edge):
         """
         Selects either destination nodes or source nodes
-        based on the edge query provided. If the source
-        node is specified in the edge query then the
-        destination nodes will be selected, else the
-        source nodes will be selected. Note that either
-        one of the source or destination nodes (but not
-        necessarily both) must be specified in the edge
-        query.
+        based on the edge query provided. If source node
+        is specified, then destination nodes are selected,
+        and vice versa.
 
         :param edge: The edge query.
         """
@@ -136,7 +132,7 @@ class Query(object):
         """
         Traverse the graph, and selecting the destination
         nodes for a particular relation that the selected
-        nodes are a source of. I.e. select the friends of
+        nodes are a source of, i.e. select the friends of
         my friends.
 
         :param edge: The edge object. If the edge's
@@ -157,26 +153,28 @@ class Query(object):
     @property
     def intersection(self):
         """
-        Returns the Query object itself but inserts a
-        SQL intersection keyword.
+        Intersect the current query with another one.
+        The method doesn't process the objects in a
+        loop/set but uses an SQL query.
         """
         return self.derived('INTERSECT')
 
     @property
     def difference(self):
         """
+        Compute the difference between the current
+        selected nodes and the another query, and
+        explicitly not a `symmetric difference`.
         Similar to the :meth:``Query.intersection``
-        method, but sets up the query object for an
-        SQL ``EXCEPT`` query.
         """
         return self.derived('EXCEPT')
 
     @property
     def union(self):
         """
-        Similar to the :meth:``Query.intersection``
-        method and sets up the query object for a
-        UNION query.
+        Compute the union between the current selected
+        nodes and another query. Similar to the
+        :meth:``Query.intersection``.
         """
         return self.derived('UNION')
 
