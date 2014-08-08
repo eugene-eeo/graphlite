@@ -1,4 +1,4 @@
-# <img src="https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png">
+[Graphlite](https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png)
 
 Graphlite is a tiny graph datastore that stores adjacency lists
 similar to FlockDB but like conventional graph databases, allow
@@ -52,6 +52,6 @@ Note that we use `py.test` for testing so if you haven't, make
 sure you `pip install pytest`. But you should.
 
 
-* Code status: ![Build](https://img.shields.io/travis/eugene-eeo/graphlite.svg)
-* Maintainer: [Eugene Eeo](https://github.com/eugene-eeo)
-* License: MIT
+* **Code status**: ![Build](https://img.shields.io/travis/eugene-eeo/graphlite.svg)
+* **Maintainer**: [Eugene Eeo](https://github.com/eugene-eeo)
+* **License**: MIT
