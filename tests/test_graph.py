@@ -1,5 +1,4 @@
-from graphlite import V, Graph
-from threading import Thread
+from graphlite import V
 from sqlite3 import ProgrammingError
 
 

@@ -1,11 +1,10 @@
 import pytest
-from graphlite import Graph, V
+from graphlite import connect, V
 
 
 @pytest.fixture
 def graph(request):
-    g = Graph(uri=':memory:',
-              graphs=['likes', 'knows'])
+    g = connect(':memory:', graphs=['likes', 'knows'])
 
     with g.transaction() as tr:
         for i in range(2, 5):
