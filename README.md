@@ -1,68 +1,93 @@
-![graphlite](https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png)
+# <img src="https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png">
+
+[![Build](https://travis-ci.org/eugene-eeo/graphlite)](https://img.shields.io/travis/eugene-eeo/graphlite.svg)
+
+### Relations, simplified
+
+**Graphlite** is a social graph interface over SQLite for
+relatively small datasets. It can handle anything that the
+underlying SQLite backend can cope with.
 
 
-![Build Stats](http://img.shields.io/travis/eugene-eeo/graphlite.svg)
+## Usage
 
-A simple MIT-licensed social graph datastore using the SQLite
-library as a backend. Graphlite provides storage for nodes-
-unsigned integers that represent objects in another datastore,
-for example the ID of your users and their posts.
+**Graphlite** was designed to be as minimal and modular
+as possible, and as performant as possible, while at the
+same time be as developer friendly as possible. It does
+not aim to solve lots of problems, but rather be good at
+solving specific problems. The internal codebase was also
+designed around reusability and the components concept-
+we can swap one database driver out for another if needed.
+
+Start by initializing a new graph in a URI:
 
 ```python
-from graphlite import Graph, V
-g = Graph(uri=':memory:', graphs=['follows'])
+from graphlite import V, connect
+graph = connect(':memory:', graphs=['follows'])
+```
 
-with g.transaction() as tr:
-    for i in range(2, 5):
+Note that you need to pass an iterable to the function-
+this is because **Graphlite** needs to know which relations
+you are going to write to or read from. Rule of thumb:
+if the call modifies the graph, you'll have to use a
+transaction:
+
+```python
+with graph.transaction() as tr:
+    for i in range(2, 4):
         tr.store(V(1).knows(i))
+
+assert V(1).knows(2) in graph
+assert V(1).knows(3) in graph
 ```
 
-The relations, when stored in the SQLite database, are not
-indexed by their recency or any time based value, but rather
-by either the source or destination nodes. All queries are
-performed using these clustered indexes as well.
-
-Graphlite aims to be performant and sane, as well as offering
-a nice API for developers to work with. I also aim for the
-library being thread-safe. Being inspired by FlockDB, Graphlite
-supports both simple and compound arithmetic queries, as well
-as queries to forwards and backwards relations:
+Then perform queries on your data- you can either perform
+forwards (where the source node is specified and you want
+to select the destination node), or inverse (the opposite
+of forwads) queries:
 
 ```python
-g.find(V(1).knows)
-g.find(V(1).knows).intersection(...)
-g.find(V(1).knows).difference(...)
-g.find(V().knows(1)).union(...)
+graph.find(V(1).knows)
+graph.find(V().knows(1))
 ```
 
-They are pretty self explanatory. You can use them to simulate
-graph traversal, although for some edge cases you may need the
-slower `traverse` method:
+And similar to FlockDB, **Graphlite** also offers powerful
+set-based operations to be performed against queries:
 
 ```python
-g.find(V(1).knows).traverse(V().knows)
-g.find(V(1).knows).traverse(...).traverse(...)
+graph.find(...).intersection(...)
+graph.find(...).difference(...)
+graph.find(...).union(...)
 ```
 
-I.e. for unavoidable situations to find out who does the people
-that 1 knows, know. Like regular Python collections you can also
-slice the results, i.e.:
+A feature inspired from the MongoEngine ORM is counting and
+slicing, which gives rise to powerful queries:
 
 ```python
-g.find(V(1).knows)[2:10]
-g.find(V(3).knows)[1::2]
+graph.find(...).count()
+graph.find(...)[:5]
 ```
 
-Sometimes just validating relations is what you want.
+Of course, traversal operations are also supported by the
+library. Even nested traversals are possible, for example,
+to get the people that 1's friends knows that knows 2, we
+can do the following query:
 
 ```python
-if V(1).knows(2) in g:
-    # HE HAS A FRIEND!
+friends = graph.find(V(1).knows).traverse(V().knows)
+friends.traverse(V().knows(2))
 ```
 
-If you are looking for a package that can scale up with SQLite
-and is simple to work with, while sane, then Graphlite is for
-you. Else I recommend you to start looking at various other
-libraries like [neomodel](https://github.com/robinedwards/neomodel),
-or the Python interface to the FlockDB database, if you are into
-adjacency lists: [python-flockdb](https://github.com/pyronicide/python-flockdb).
+Powerful deletes are also possible, though if you need
+more than simple forwards/inverse/relation-only queries
+then you will have to do specific deletes.
+
+```python
+with graph.transaction() as tr:
+    tr.delete(V(1).knows(2))
+    tr.delete(V(1).knows)
+    tr.delete(V().knows(2))
+
+    # deletes the entire table
+    tr.delete(V().knows)
+```
