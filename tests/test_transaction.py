@@ -50,9 +50,7 @@ def test_delete(graph):
         V().knows,
     ]
     assertions = [
-        lambda: V(1).knows(2) not in graph,
-        lambda: V(1).knows(3) not in graph,
-        lambda: V(1).knows(4) not in graph,
+        (lambda k=l: V(1).knows(k) not in graph) for l in range(2, 5)
     ]
 
     for assertion, query in zip(assertions, queries):
