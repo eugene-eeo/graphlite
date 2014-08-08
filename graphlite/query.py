@@ -150,7 +150,7 @@ class Query(object):
             SQL.compound_iv_query(dst, rel, query)
         )
         instance = Query(self.db)
-        instance.sql = [statement]
+        instance.sql = (statement,)
         instance.params = self.params + params
         return instance
 
