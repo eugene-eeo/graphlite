@@ -64,6 +64,11 @@ class Graph(object):
 
     @contextmanager
     def transaction(self):
+        """
+        A context manager that returns a Transaction object
+        to the caller. All operations must then be performed
+        on the transaction object.
+        """
         trans = Transaction(db=self.db, lock=self.lock)
         try:
             yield trans
