@@ -1,7 +1,5 @@
 # <img src="https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png">
 
-![Build](https://img.shields.io/travis/eugene-eeo/graphlite.svg)
-
 Graphlite is a tiny graph datastore that stores adjacency lists
 similar to FlockDB but like conventional graph databases, allow
 you to query them with traversals (graph-walking queries), and
@@ -53,5 +51,7 @@ $ git push
 Note that we use `py.test` for testing so if you haven't, make
 sure you `pip install pytest`. But you should.
 
-* License: MIT
+
+* Code status: ![Build](https://img.shields.io/travis/eugene-eeo/graphlite.svg)
 * Maintainer: [Eugene Eeo](https://github.com/eugene-eeo)
+* License: MIT
