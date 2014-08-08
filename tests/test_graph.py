@@ -31,10 +31,10 @@ def test_concurrency():
             g.store(V(1).knows(value))
         return callback
 
-    stored = (2, 3, 4, 5)
-    threading_test(store, stored)
+    nodes = (2, 3, 4, 5)
+    threading_test(store, nodes)
 
-    for item in stored:
+    for item in nodes:
         assert V(1).knows(item) in g
 
 
