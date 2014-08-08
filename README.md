@@ -1,4 +1,4 @@
-[Graphlite](https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png)
+![Graphlite](https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png)
 
 Graphlite is a tiny graph datastore that stores adjacency lists
 similar to FlockDB but like conventional graph databases, allow
