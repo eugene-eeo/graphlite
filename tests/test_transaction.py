@@ -25,6 +25,24 @@ def test_concurrency(graph):
         assert item in graph
 
 
+def test_delete(graph):
+    queries = [
+        V(1).knows(2),
+        V().knows(3),
+        V().knows,
+    ]
+    assertions = [
+        lambda: V(1).knows(2) not in graph,
+        lambda: V(1).knows(3) not in graph,
+        lambda: V(1).knows(4) not in graph,
+    ]
+
+    for assertion, query in zip(assertions, queries):
+        with graph.transaction() as tr:
+            tr.delete(query)
+        assert assertion()
+
+
 def test_transaction(graph):
     with graph.transaction() as tr:
         tr.store(V(1).knows(7))
@@ -42,23 +60,6 @@ def test_transaction_atomic(graph):
         raise AssertionError
     except OperationalError:
         assert V(1).knows(7) not in graph
-
-
-def test_delete(graph):
-    queries = [
-        V(1).knows(2),
-        V().knows(3),
-        V().knows,
-    ]
-    assertions = [
-        (lambda k=l: V(1).knows(k) not in graph) for l in range(2, 5)
-    ]
-
-    for assertion, query in zip(assertions, queries):
-        with graph.transaction() as tr:
-            tr.delete(query)
-
-        assert assertion()
 
 
 def test_transaction_abort(graph):
