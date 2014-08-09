@@ -24,7 +24,7 @@ works with datasets that you can fit into your SQLite database.
          .traverse(V().knows)
 
 Graphlite is thread safe, meaning that when transactions are
-comitted (at the end of the `with` block), a lock is held and
+comitted (at the end of the ``with`` block), a lock is held and
 only the thread that commits gets to run. Thread safety is
 emphasised if you look at the test suite.
 
@@ -51,8 +51,8 @@ commit of your pull request). In short:
     $ git commit -a
     $ git push
 
-Note that we use `py.test` for testing so if you haven't, make
-sure you `pip install pytest`. But you should.
+Note that we use ``py.test`` for testing so if you haven't,
+make sure you ``pip install pytest``. But you should.
 
 
 * **Code status**: |Build|
