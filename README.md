@@ -39,7 +39,7 @@ fork the repo, work on the code and just make a pull request
 commit of your pull request). In short:
 
 ```sh
-$ git clone ssh://git@github.com/eugene-eeo/graphlite.git
+$ git clone ssh://git@github.com/$USERNAME/graphlite.git
 $ cd graphlite
 $ git checkout -b $FEATURE
 $ # hackedy hack hack
