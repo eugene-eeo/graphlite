@@ -8,5 +8,7 @@ setup(
     description='embedded graph datastore',
 
     author='Eugene Eeo',
-    author_email='packwolf58@gmail.com'
+    author_email='packwolf58@gmail.com',
+    url='https://github.com/eugene-eeo/graphlite',
+    long_description=open('README.rst').read(),
 )
