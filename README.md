@@ -15,8 +15,8 @@ with graph.transaction() as tr:
     tr.store(V(2).knows(3))
     tr.store(V(3).knows(5))
 
-# who are the friends of friends of
-# both 1 and 2?
+# who are the friends of the mutual friends
+# of both 1 and 2?
 graph.find(V(1).knows)\
      .intersection(V(2).knows)\
      .traverse(V().knows)
