@@ -53,8 +53,8 @@ def remove(src, rel, dst):
 
 def forwards_relation(src, rel):
     """
-    Selects the destination nodes given a relation
-    and a source node.
+    Returns the SQL query for selecting the destination
+    nodes given a relation and a source node.
 
     :param src: The source node.
     :param rel: The relation.
@@ -77,8 +77,8 @@ def inverse_relation(dst, rel):
 
 def select_one(src, rel, dst):
     """
-    Selects one ID from a relation table given a source
-    and destination node.
+    Create an SQL query that selects one ID from a
+    relation table given a source and destination node.
 
     :param src: The source node.
     :param rel: The relation.
