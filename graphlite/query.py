@@ -187,11 +187,11 @@ class Query(object):
         """
         return sum(1 for __ in self)
 
-    def __getitem__(self, value):
+    def __getitem__(self, sl):
         """
         Only supports slicing operations, and returns
         an iterable with the slice taken into account.
 
-        :param value: The slice object.
+        :param sl: The slice object.
         """
-        return islice(self, value.start, value.stop, value.step)
+        return islice(self, sl.start, sl.stop, sl.step)
