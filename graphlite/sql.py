@@ -88,7 +88,7 @@ def select_one(src, rel, dst):
     return smt % (rel), (src, dst)
 
 
-def compound_fw_query(query, rel):
+def compound_fwd_query(query, rel):
     """
     Create a compound forwards query that selects the
     destination nodes, which have source nodes within
@@ -101,7 +101,7 @@ def compound_fw_query(query, rel):
     return smt % (rel, query), tuple()
 
 
-def compound_iv_query(query, rel, dst):
+def compound_inv_query(query, rel, dst):
     """
     Create a compound inverse query, similar to
     :meth:``compound_fw_query`` but only selects
