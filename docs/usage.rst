@@ -92,6 +92,30 @@ to select the friends of friends of 1:
 
     graph.find(V(1).knows).traverse(V().knows)
 
+And you can also specify the destination node to the ``traverse``
+query to select the source nodes that have the specific relation
+to the destination node. For example, to select the friends of friends
+of 1 that are friends with 2:
+
+.. code-block:: python
+
+    graph.find(V(1).knows).traverse(V().knows(2))
+
+Perhaps you want to keep traversing and find out the friends of those
+people? You can do that as well:
+
+.. code-block:: python
+
+    graph.find(V(1).knows).traverse(V().knows(2))\
+                          .traverse(V().knows)
+
+You can also slice the query objects the same way you'd slice a slice
+object, but you will only get an iterable back. For example to get the
+first five people that 1 knows:
+
+.. code-block:: python
+
+    graph.find(V(1).knows)[:5]
 
 --------------
 Deleting Edges
