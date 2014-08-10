@@ -142,8 +142,8 @@ class Query(object):
         query = '\n'.join(self.sql)
         rel, dst = edge.rel, edge.dst
         statement, params = (
-            SQL.compound_fw_query(rel, query) if dst is None else
-            SQL.compound_iv_query(dst, rel, query)
+            SQL.compound_fw_query(query, rel) if dst is None else
+            SQL.compound_iv_query(query, rel, dst)
         )
         instance = Query(self.db)
         instance.sql = (statement,)
