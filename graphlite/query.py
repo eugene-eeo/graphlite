@@ -136,8 +136,8 @@ class Query(object):
         my friends.
 
         :param edge: The edge object. If the edge's
-        destination node is specified then the source
-        nodes will be selected.
+            destination node is specified then the source
+            nodes will be selected.
         """
         query = '\n'.join(self.sql)
         rel, dst = edge.rel, edge.dst
