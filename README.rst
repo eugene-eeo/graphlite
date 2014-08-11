@@ -55,7 +55,7 @@ commit of your pull request). In short:
     $ cd graphlite
     $ git checkout -b $FEATURE
     $ # hackedy hack hack
-    $ py.test
+    $ py.test tests
     $ git commit -a
     $ git push
 
