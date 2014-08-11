@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>graphlite.query &mdash; Graphlite 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Graphlite 1.0.0 documentation" href="../../index.html" />
+    <link rel="up" title="graphlite" href="../graphlite.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">Graphlite 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../graphlite.html" accesskey="U">graphlite</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for graphlite.query</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">closing</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">islice</span>
+<span class="kn">import</span> <span class="nn">graphlite.sql</span> <span class="kn">as</span> <span class="nn">SQL</span>
+
+
+<span class="k">class</span> <span class="nc">V</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;src&#39;</span><span class="p">,</span> <span class="s">&#39;rel&#39;</span><span class="p">,</span> <span class="s">&#39;dst&#39;</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new V object that represents an edge. This</span>
+<span class="sd">    object is expected throughout the API where the</span>
+<span class="sd">    parameter is named `edge`. All parameters are optional</span>
+<span class="sd">    and default to None.</span>
+
+<span class="sd">    :param src: The source node.</span>
+<span class="sd">    :param rel: The relation.</span>
+<span class="sd">    :param dst: The destination node.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">rel</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">=</span> <span class="n">src</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel</span> <span class="o">=</span> <span class="n">rel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the attribute being requested is found in the</span>
+<span class="sd">        ``__slots__`` attribute, then return the actual</span>
+<span class="sd">        thing, else assign the attribute as an internally</span>
+<span class="sd">        stored relation.</span>
+
+<span class="sd">        :param attr: The attribute.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__slots__</span>
+        <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel</span> <span class="o">=</span> <span class="n">attr</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dst</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign a destination node to the edge.</span>
+
+<span class="sd">        :param dst: The destination node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="o">=</span> <span class="n">dst</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;(</span><span class="si">%s</span><span class="s">)-[</span><span class="si">%s</span><span class="s">]-&gt;(</span><span class="si">%s</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="s">&#39;*&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span>
+            <span class="s">&#39;*&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="s">&#39;:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">),</span>
+            <span class="s">&#39;*&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks for equality between the edge and</span>
+<span class="sd">        another object- the other object needn&#39;t</span>
+<span class="sd">        be an edge.</span>
+
+<span class="sd">        :param other: The other thing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">V</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">src</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rel</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">rel</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dst</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">dst</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Uses Python&#39;s tuple hashing algorithm to</span>
+<span class="sd">        hash the internal source, relation, and</span>
+<span class="sd">        destination nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="Query"><a class="viewcode-back" href="../../api.html#graphlite.query.Query">[docs]</a><span class="k">class</span> <span class="nc">Query</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new query object that acts on a particular</span>
+<span class="sd">    SQLite connection instance.</span>
+
+<span class="sd">    :param db: The SQLite connection.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">sql</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(),</span> <span class="n">params</span><span class="o">=</span><span class="nb">tuple</span><span class="p">()):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">db</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sql</span> <span class="o">=</span> <span class="n">sql</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute the internally stored SQL query and then</span>
+<span class="sd">        yield every result to the caller. You can reuse</span>
+<span class="sd">        this function as many times as you want but it</span>
+<span class="sd">        is not deterministic.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">statement</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sql</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">cursor</span><span class="p">())</span> <span class="k">as</span> <span class="n">cursor</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">statement</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">cursor</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Query.derived"><a class="viewcode-back" href="../../api.html#graphlite.query.Query.derived">[docs]</a>    <span class="k">def</span> <span class="nf">derived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statement</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="nb">tuple</span><span class="p">()):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a new query object set up correctly with</span>
+<span class="sd">        the current query object&#39;s statements and parameters</span>
+<span class="sd">        appended to the start of the new one.</span>
+
+<span class="sd">        :param statement: The SQL statements to append.</span>
+<span class="sd">        :param params: The parameters to append.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Query</span><span class="p">(</span><span class="n">db</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">,</span>
+                     <span class="n">sql</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sql</span> <span class="o">+</span> <span class="p">(</span><span class="n">statement</span><span class="p">,),</span>
+                     <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">+</span> <span class="n">params</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Selects either destination nodes or source nodes</span>
+<span class="sd">        based on the edge query provided. If source node</span>
+<span class="sd">        is specified, then destination nodes are selected,</span>
+<span class="sd">        and vice versa.</span>
+
+<span class="sd">        :param edge: The edge query.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">src</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">src</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">rel</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">dst</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">derived</span><span class="p">(</span><span class="o">*</span><span class="p">(</span>
+            <span class="n">SQL</span><span class="o">.</span><span class="n">forwards_relation</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span> <span class="k">if</span> <span class="n">dst</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span>
+            <span class="n">SQL</span><span class="o">.</span><span class="n">inverse_relation</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span>
+        <span class="p">))</span>
+
+<div class="viewcode-block" id="Query.traverse"><a class="viewcode-back" href="../../api.html#graphlite.query.Query.traverse">[docs]</a>    <span class="k">def</span> <span class="nf">traverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Traverse the graph, and selecting the destination</span>
+<span class="sd">        nodes for a particular relation that the selected</span>
+<span class="sd">        nodes are a source of, i.e. select the friends of</span>
+<span class="sd">        my friends.</span>
+
+<span class="sd">        :param edge: The edge object. If the edge&#39;s</span>
+<span class="sd">        destination node is specified then the source</span>
+<span class="sd">        nodes will be selected.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sql</span><span class="p">)</span>
+        <span class="n">rel</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">rel</span><span class="p">,</span> <span class="n">edge</span><span class="o">.</span><span class="n">dst</span>
+        <span class="n">statement</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">SQL</span><span class="o">.</span><span class="n">compound_fwd_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">rel</span><span class="p">)</span> <span class="k">if</span> <span class="n">dst</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span>
+            <span class="n">SQL</span><span class="o">.</span><span class="n">compound_inv_query</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">rel</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">sql</span> <span class="o">=</span> <span class="p">(</span><span class="n">statement</span><span class="p">,)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">+</span> <span class="n">params</span>
+        <span class="k">return</span> <span class="n">instance</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Query.intersection"><a class="viewcode-back" href="../../api.html#graphlite.query.Query.intersection">[docs]</a>    <span class="k">def</span> <span class="nf">intersection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Intersect the current query with another one.</span>
+<span class="sd">        The method doesn&#39;t process the objects in a</span>
+<span class="sd">        loop/set but uses an SQL query.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">derived</span><span class="p">(</span><span class="s">&#39;INTERSECT&#39;</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Query.difference"><a class="viewcode-back" href="../../api.html#graphlite.query.Query.difference">[docs]</a>    <span class="k">def</span> <span class="nf">difference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the difference between the current</span>
+<span class="sd">        selected nodes and the another query, and</span>
+<span class="sd">        explicitly not a `symmetric difference`.</span>
+<span class="sd">        Similar to the :meth:``Query.intersection``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">derived</span><span class="p">(</span><span class="s">&#39;EXCEPT&#39;</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+<div class="viewcode-block" id="Query.union"><a class="viewcode-back" href="../../api.html#graphlite.query.Query.union">[docs]</a>    <span class="k">def</span> <span class="nf">union</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the union between the current selected</span>
+<span class="sd">        nodes and another query. Similar to the</span>
+<span class="sd">        :meth:``Query.intersection``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">derived</span><span class="p">(</span><span class="s">&#39;UNION&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Query.count"><a class="viewcode-back" href="../../api.html#graphlite.query.Query.count">[docs]</a>    <span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Counts the objects returned by the query.</span>
+<span class="sd">        You will not be able to iterate through this</span>
+<span class="sd">        query again (with deterministic results,</span>
+<span class="sd">        anyway).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">__</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sl</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Only supports slicing operations, and returns</span>
+<span class="sd">        an iterable with the slice taken into account.</span>
+
+<span class="sd">        :param sl: The slice object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">islice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sl</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">sl</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">sl</span><span class="o">.</span><span class="n">step</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">Graphlite 1.0.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../graphlite.html" >graphlite</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Eugene Eeo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

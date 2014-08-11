@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Documentation &mdash; Graphlite 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Graphlite 1.0.0 documentation" href="index.html" />
+    <link rel="prev" title="Quickstart" href="usage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="usage.html" title="Quickstart"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-documentation">
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="graphlite.connect">
+<tt class="descclassname">graphlite.</tt><tt class="descname">connect</tt><big>(</big><em>uri</em>, <em>graphs=()</em><big>)</big><a class="reference internal" href="_modules/graphlite.html#connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Graph object with the given URI and
+created graphs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>uri</strong> &#8211; The URI to the SQLite DB.</li>
+<li><strong>graphs</strong> &#8211; The graphs to create.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="graphlite.graph.Graph">
+<em class="property">class </em><tt class="descclassname">graphlite.graph.</tt><tt class="descname">Graph</tt><big>(</big><em>uri</em>, <em>graphs=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/graphlite/graph.html#Graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.graph.Graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes a new Graph object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>uri</strong> &#8211; The URI of the SQLite file.</li>
+<li><strong>graphs</strong> &#8211; Graphs to create.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="graphlite.graph.Graph.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/graphlite/graph.html#Graph.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.graph.Graph.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the SQLite connection.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graphlite.graph.Graph.find">
+<tt class="descname">find</tt><a class="reference internal" href="_modules/graphlite/graph.html#Graph.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.graph.Graph.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Query object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.graph.Graph.setup_sql">
+<tt class="descname">setup_sql</tt><big>(</big><em>graphs</em><big>)</big><a class="reference internal" href="_modules/graphlite/graph.html#Graph.setup_sql"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.graph.Graph.setup_sql" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up the SQL tables for the graph object,
+and creates indexes as well.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graphs</strong> &#8211; The graphs to create.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.graph.Graph.transaction">
+<tt class="descname">transaction</tt><big>(</big><em>*args</em>, <em>**kwds</em><big>)</big><a class="reference internal" href="_modules/graphlite/graph.html#Graph.transaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.graph.Graph.transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A context manager that returns a Transaction object
+to the caller. All operations must then be performed
+on the transaction object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="graphlite.transaction.Transaction">
+<em class="property">class </em><tt class="descclassname">graphlite.transaction.</tt><tt class="descname">Transaction</tt><big>(</big><em>db</em>, <em>lock</em><big>)</big><a class="reference internal" href="_modules/graphlite/transaction.html#Transaction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.transaction.Transaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents a single, atomic transaction. All
+calls are delayed jobs- they do not execute
+until the transaction is committed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>db</strong> &#8211; An SQLite connection.</li>
+<li><strong>lock</strong> &#8211; A threading.RLock instance.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="graphlite.transaction.Transaction.abort">
+<tt class="descname">abort</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/graphlite/transaction.html#Transaction.abort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.transaction.Transaction.abort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raises an <tt class="docutils literal"><span class="pre">AbortSignal</span></tt>. If you used the
+<tt class="docutils literal"><span class="pre">Graph.transaction</span></tt> context manager this
+exception is automatically caught and ignored.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.transaction.Transaction.commit">
+<tt class="descname">commit</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/graphlite/transaction.html#Transaction.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.transaction.Transaction.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commits the stored changes to the database.
+Note that you <cite>do not</cite> have to call this
+function if you used the <tt class="docutils literal"><span class="pre">Graph.transaction</span></tt>
+context manager, or the transaction will be
+committed twice.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graphlite.transaction.Transaction.defined">
+<tt class="descname">defined</tt><a class="reference internal" href="_modules/graphlite/transaction.html#Transaction.defined"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.transaction.Transaction.defined" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if there are any internal
+operations waiting to be performed when the
+commit method is called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.transaction.Transaction.delete">
+<tt class="descname">delete</tt><big>(</big><em>edge</em><big>)</big><a class="reference internal" href="_modules/graphlite/transaction.html#Transaction.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.transaction.Transaction.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes an edge from the database. Either the
+source node or destination node <cite>may</cite> be specified,
+but the relation has to be specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edge</strong> &#8211; The edge.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.transaction.Transaction.perform_ops">
+<tt class="descname">perform_ops</tt><big>(</big><em>cursor</em><big>)</big><a class="reference internal" href="_modules/graphlite/transaction.html#Transaction.perform_ops"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.transaction.Transaction.perform_ops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the stored operations on the given
+cursor object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cursor</strong> &#8211; The SQLite.Cursor object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.transaction.Transaction.store">
+<tt class="descname">store</tt><big>(</big><em>edge</em><big>)</big><a class="reference internal" href="_modules/graphlite/transaction.html#Transaction.store"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.transaction.Transaction.store" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store an edge in the database. Both the source
+and destination nodes must be specified, as
+well as the relation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edge</strong> &#8211; The edge.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="graphlite.query.Query">
+<em class="property">class </em><tt class="descclassname">graphlite.query.</tt><tt class="descname">Query</tt><big>(</big><em>db</em>, <em>sql=()</em>, <em>params=()</em><big>)</big><a class="reference internal" href="_modules/graphlite/query.html#Query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.query.Query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new query object that acts on a particular
+SQLite connection instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db</strong> &#8211; The SQLite connection.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="graphlite.query.Query.count">
+<tt class="descname">count</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/graphlite/query.html#Query.count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.query.Query.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counts the objects returned by the query.
+You will not be able to iterate through this
+query again (with deterministic results,
+anyway).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.query.Query.derived">
+<tt class="descname">derived</tt><big>(</big><em>statement</em>, <em>params=()</em><big>)</big><a class="reference internal" href="_modules/graphlite/query.html#Query.derived"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.query.Query.derived" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new query object set up correctly with
+the current query object&#8217;s statements and parameters
+appended to the start of the new one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>statement</strong> &#8211; The SQL statements to append.</li>
+<li><strong>params</strong> &#8211; The parameters to append.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graphlite.query.Query.difference">
+<tt class="descname">difference</tt><a class="reference internal" href="_modules/graphlite/query.html#Query.difference"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.query.Query.difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the difference between the current
+selected nodes and the another query, and
+explicitly not a <cite>symmetric difference</cite>.
+Similar to the :meth:<tt class="docutils literal"><span class="pre">Query.intersection</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graphlite.query.Query.intersection">
+<tt class="descname">intersection</tt><a class="reference internal" href="_modules/graphlite/query.html#Query.intersection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.query.Query.intersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intersect the current query with another one.
+The method doesn&#8217;t process the objects in a
+loop/set but uses an SQL query.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="graphlite.query.Query.traverse">
+<tt class="descname">traverse</tt><big>(</big><em>edge</em><big>)</big><a class="reference internal" href="_modules/graphlite/query.html#Query.traverse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.query.Query.traverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Traverse the graph, and selecting the destination
+nodes for a particular relation that the selected
+nodes are a source of, i.e. select the friends of
+my friends.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>edge</strong> &#8211; The edge object. If the edge&#8217;s
+destination node is specified then the source
+nodes will be selected.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="graphlite.query.Query.union">
+<tt class="descname">union</tt><a class="reference internal" href="_modules/graphlite/query.html#Query.union"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#graphlite.query.Query.union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the union between the current selected
+nodes and another query. Similar to the
+:meth:<tt class="docutils literal"><span class="pre">Query.intersection</span></tt>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="usage.html"
+                        title="previous chapter">Quickstart</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/api.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="usage.html" title="Quickstart"
+             >previous</a> |</li>
+        <li><a href="index.html">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Eugene Eeo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

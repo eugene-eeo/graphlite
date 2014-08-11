@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to Graphlite &mdash; Graphlite 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Graphlite 1.0.0 documentation" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="introduction-to-graphlite">
+<h1>Introduction to Graphlite<a class="headerlink" href="#introduction-to-graphlite" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-graphlite">
+<h2>What is Graphlite?<a class="headerlink" href="#what-is-graphlite" title="Permalink to this headline">¶</a></h2>
+<p>Graphlite is a social graph datastore. It doesn&#8217;t store
+properties between relations, but it can store thousands
+of relations between integers, which are most likely
+representing objects in your other databases, such as
+the ID column of your users/statuses table.</p>
+<p>Being based on a relational DBM, Graphlite supports very
+atomic transactions, similar to the transactions that
+SQLite offers even with transactions, performance isn&#8217;t
+degraded because the SQLite library is very, very fast.</p>
+<p>Graphlite aims to be performant, thread safe, and have
+a pleasant API for developer happiness. For example, to
+create a transaction:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">graph</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">tr</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>And one thing I&#8217;m very happy with is how querying works
+and the expressiveness of the querying &#8220;syntax&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">posted</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="cheatsheet">
+<h2>Cheatsheet<a class="headerlink" href="#cheatsheet" title="Permalink to this headline">¶</a></h2>
+<p>To connect to an existing SQLite database file (substitute
+<tt class="docutils literal"><span class="pre">URI</span></tt> and <tt class="docutils literal"><span class="pre">GRAPHS</span></tt> with the URI of your database file
+and the graphs that you want to query/insert to):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">graphlite</span> <span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">V</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="n">URI</span><span class="p">,</span> <span class="n">graphs</span><span class="o">=</span><span class="n">GRAPHS</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To insert (possibly multiple) relation(s), you must create
+a transaction and call methods of the transaction object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">graph</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">tr</span><span class="p">:</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>To query the graph, you can simply do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>   <span class="c"># people that 1 knows</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="c"># people that knows 1</span>
+</pre></div>
+</div>
+<p>Querying has a few more &#8220;tricks&#8221;, notably the powerful set
+operations that you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>They should be quite familiar to you (remember the Venn
+diagrams from school?). If you are not familiar with set
+operations or would like a demo of how they work I would
+recommend looking at <a class="reference external" href="http://www.texample.net/media/tikz/examples/PNG/set-operations-illustrated-with-venn-diagrams.png">this</a>
+diagram.</p>
+<p>Graphlite also supports &#8220;graph-hopping&#8221; or graph traversal
+queries, in spite of the fact that it was inspired by
+FlockDB:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above query states that &#8220;find all of the people that 1
+knows, and then find all of the people that <cite>they</cite> know&#8221;.
+You can also pass in a destination node to the second query,
+to select the source nodes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Which means &#8220;find all of the people that one knows, that
+knows 2&#8221;. This can also be expressed with the help of an
+intersection:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Note that you can traverse indefinitely, i.e. to find out
+who are the friends of friends of the people that know 2,
+you can do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>\
+                        <span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also count the nodes returned by a query via the
+<tt class="docutils literal"><span class="pre">count</span></tt> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To delete edges from the datastore, you have three options:</p>
+<ul class="simple">
+<li>Specific deletes</li>
+<li>Inverse &amp; Forwards deletes</li>
+<li>Relation-wide deletes</li>
+</ul>
+<p>To illustrate,</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">graph</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">tr</span><span class="p">:</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="c"># delete edges of type &quot;1 knows ...&quot;</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
+
+    <span class="c"># delete edges of type &quot;... knows 1&quot;</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c"># delete edges of type &quot;... knows ...&quot;</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Introduction to Graphlite</a><ul>
+<li><a class="reference internal" href="#what-is-graphlite">What is Graphlite?</a></li>
+<li><a class="reference internal" href="#cheatsheet">Cheatsheet</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/intro.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Eugene Eeo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>

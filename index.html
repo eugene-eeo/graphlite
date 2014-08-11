@@ -1,84 +1,156 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Graphlite by eugene-eeo</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Graphlite &mdash; Graphlite 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Graphlite 1.0.0 documentation" href="#" />
+    <link rel="next" title="Introduction to Graphlite" href="intro.html" /> 
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>Graphlite</h1>
-        <p>embedded graph datastore</p>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction to Graphlite"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
 
-        <p class="view"><a href="https://github.com/eugene-eeo/graphlite">View the Project on GitHub <small>eugene-eeo/graphlite</small></a></p>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-graphlite">
+<h1>Welcome to Graphlite<a class="headerlink" href="#welcome-to-graphlite" title="Permalink to this headline">¶</a></h1>
+<p>Graphlite is a tiny graph datastore that stores adjacency lists
+similar to FlockDB but like conventional graph databases, allow
+you to query them with traversals (graph-walking queries), and
+works with datasets that you can fit into your SQLite database.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">graphlite</span> <span class="kn">import</span> <span class="n">connect</span><span class="p">,</span> <span class="n">V</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s">&#39;:memory:&#39;</span><span class="p">,</span> <span class="n">graphs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;knows&#39;</span><span class="p">])</span>
 
+<span class="k">with</span> <span class="n">graph</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">tr</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 
-        <ul>
-          <li><a href="https://github.com/eugene-eeo/graphlite/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/eugene-eeo/graphlite/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/eugene-eeo/graphlite">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <p><img src="https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png" alt="graphlite"></p>
-
-<p><img src="http://img.shields.io/travis/eugene-eeo/graphlite.svg" alt="Build Stats"></p>
-
-<p>A simple MIT-licensed social graph datastore using the SQLite
-library as a backend. Graphlite provides storage for nodes-
-unsigned integers that represent objects in another datastore,
-for example the ID of your users and their posts.</p>
-
-<div class="highlight highlight-python"><pre><span class="kn">from</span> <span class="nn">graphlite</span> <span class="kn">import</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">V</span>
-<span class="n">g</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">uri</span><span class="o">=</span><span class="s">':memory:'</span><span class="p">,</span> <span class="n">graphs</span><span class="o">=</span><span class="p">[</span><span class="s">'follows'</span><span class="p">])</span>
-
-<span class="n">g</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">g</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
-<span class="n">g</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="c"># who are the friends of the mutual friends</span>
+<span class="c"># of both 1 and 2?</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>\
+     <span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
 </pre></div>
+</div>
+<p>If you are not familiar or new to the library perhaps you
+should check out <a class="reference internal" href="intro.html"><em>Introduction to Graphlite</em></a>. Else, you are most likely
+looking for the <a class="reference internal" href="api.html"><em>API Documentation</em></a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction to Graphlite</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#what-is-graphlite">What is Graphlite?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#cheatsheet">Cheatsheet</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#initializing-the-graph">Initializing the graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#inserting-edges">Inserting edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#querying">Querying</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#deleting-edges">Deleting Edges</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
 
-<p>The relations, when stored in the SQLite database, are not
-indexed by their recency or any time based value, but rather
-by either the source or destination nodes. All queries are
-performed using these clustered indexes as well.</p>
 
-<p>Graphlite aims to be performant and sane, as well as offering
-a nice API for developers to work with. I also aim for the
-library being thread-safe. Being inspired by FlockDB, Graphlite
-supports both simple and compound arithmetic queries, as well
-as queries to forwards and backwards relations:</p>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Graphlite</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
 
-<div class="highlight highlight-python"><pre><span class="n">g</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-</pre></div>
-
-<p>They are pretty self explanatory. You can use them to simulate
-graph traversal, although for some edge cases you may need the
-slower <code>traverse</code> method:</p>
-
-<div class="highlight highlight-python"><pre><span class="n">g</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">traverse</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-</pre></div>
-
-<p>I.e. for unavoidable situations to find out who does the people
-that 1 knows, know.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/eugene-eeo">eugene-eeo</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="next chapter">Introduction to Graphlite</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
     </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction to Graphlite"
+             >next</a> |</li>
+        <li><a href="#">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Eugene Eeo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
   </body>
 </html>

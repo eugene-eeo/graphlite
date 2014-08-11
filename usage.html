@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage &mdash; Graphlite 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Graphlite 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="API Documentation" href="api.html" />
+    <link rel="prev" title="Introduction to Graphlite" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API Documentation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction to Graphlite"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p><strong>Note:</strong> If you have read through the cheatsheet then this document
+for you, will just go deeper into the internals of Graphlite.</p>
+<div class="section" id="initializing-the-graph">
+<h2>Initializing the graph<a class="headerlink" href="#initializing-the-graph" title="Permalink to this headline">¶</a></h2>
+<p>To initialize a graph object, you have two options- using the
+<a class="reference internal" href="api.html#graphlite.graph.Graph" title="graphlite.graph.Graph"><tt class="xref py py-class docutils literal"><span class="pre">graphlite.graph.Graph</span></tt></a> object or the <a class="reference internal" href="api.html#graphlite.connect" title="graphlite.connect"><tt class="xref py py-meth docutils literal"><span class="pre">graphlite.connect()</span></tt></a>
+function. Usually you would use <a class="reference internal" href="api.html#graphlite.connect" title="graphlite.connect"><tt class="xref py py-meth docutils literal"><span class="pre">graphlite.connect()</span></tt></a> because
+it encapsulates anything that the codebase would want to do in
+the future.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">graphlite</span> <span class="kn">import</span> <span class="n">V</span><span class="p">,</span> <span class="n">connect</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s">&#39;:memory:&#39;</span><span class="p">,</span> <span class="n">graphs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;knows&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Note that since Graphlite is based internally on SQLite (in fact
+it can be thought as a minimal wrapper around SQLite to give you
+a graph layer), you will need to pass in the graphs that you want
+to create and query because the appropriate tables need to be
+created.</p>
+</div>
+<div class="section" id="inserting-edges">
+<h2>Inserting edges<a class="headerlink" href="#inserting-edges" title="Permalink to this headline">¶</a></h2>
+<p>Graphlite represents edges as a row which contains a source node,
+a destination node, which is where the source node is &#8220;pointing
+to&#8221;, i.e. in the edge &#8220;John knows Don&#8221;, John is the source node
+and Don is the destination node. Graphlite also stores the nodes
+as unsigned integers, so you will need a separate backing store
+to store the documents, i.e. key-value.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">graph</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">tr</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Tip:</strong> anything that modifies the graph (i.e. storage, removal)
+will be done within a transaction. This is partially because
+Graphlite is based on an SQLite backend and implementing transactions
+are quite straightforward this way.</p>
+<p>Transactions are automatically committed at the end of the <tt class="docutils literal"><span class="pre">with</span></tt>
+block, so you don&#8217;t have to hold a lock throughout the entirety of
+the block.</p>
+</div>
+<div class="section" id="querying">
+<h2>Querying<a class="headerlink" href="#querying" title="Permalink to this headline">¶</a></h2>
+<p>Querying can come in two flavours- you either do a forwards query,
+where you select the destination nodes and specify the source node,
+or an inverse query, where you get the source nodes but specify the
+destination node. Again, best explained by example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">()))</span>
+<span class="go">[2, 3, 4]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+<span class="go">[3]</span>
+</pre></div>
+</div>
+<p>You can also do queries which involve set operations, i.e. unions,
+differences, and intersections. They are all very efficient and
+does not require any data processing on our (Graphlite&#8217;s) side
+because they can be represented easily by set operations. Possible
+queries:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">graph</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="deleting-edges">
+<h2>Deleting Edges<a class="headerlink" href="#deleting-edges" title="Permalink to this headline">¶</a></h2>
+<p>Deleting edges can come in four flavours- you either do a specific
+delete of a specific edge, a forwards query, then delete all the
+rows (edges) matching it, an inverse query, or just wipe out everything
+from the table. Either way, an example would illustrate it best:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">with</span> <span class="n">graph</span><span class="o">.</span><span class="n">transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">tr</span><span class="p">:</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c"># every edge with source node 1</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
+
+    <span class="c"># every edge with destination node 2</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+    <span class="c"># everything within the knows table</span>
+    <span class="n">tr</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">V</span><span class="p">()</span><span class="o">.</span><span class="n">knows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#initializing-the-graph">Initializing the graph</a></li>
+<li><a class="reference internal" href="#inserting-edges">Inserting edges</a></li>
+<li><a class="reference internal" href="#querying">Querying</a></li>
+<li><a class="reference internal" href="#deleting-edges">Deleting Edges</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction to Graphlite</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API Documentation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/usage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="api.html" title="API Documentation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction to Graphlite"
+             >previous</a> |</li>
+        <li><a href="index.html">Graphlite 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Eugene Eeo.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.
+    </div>
+  </body>
+</html>
