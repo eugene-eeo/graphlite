@@ -36,11 +36,6 @@ on stabilising the API so we can hit 1.0 as soon as possible.
 Installing
 ----------
 
-**Note:** the current version on PyPI is not 1.0 but 1.0-alpha,
-expect some changes to the codebase (but not likely the API) if
-you install the Alpha version, or any Alpha version in the
-future.
-
 .. code-block:: sh
 
     $ pip install graphlite
