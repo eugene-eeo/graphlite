@@ -110,4 +110,3 @@ class Transaction(object):
             with self.db:
                 with closing(self.db.cursor()) as cursor:
                     self.perform_ops(cursor)
-                self.db.commit()
