@@ -28,10 +28,6 @@ comitted (at the end of the ``with`` block), a lock is held and
 only the thread that commits gets to run. Thread safety is
 emphasised if you look at the test suite.
 
-The library is currently under construction and API changes are
-unevitable until it's released on PyPI. Currently I'm working
-on stabilising the API so we can hit 1.0 as soon as possible.
-
 ----------
 Installing
 ----------
