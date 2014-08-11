@@ -5,4 +5,4 @@ python:
     - "3.2"
     - "3.3"
     - "pypy"
-script: py.test
+script: py.test tests
