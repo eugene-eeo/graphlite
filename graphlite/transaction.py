@@ -107,11 +107,7 @@ class Transaction(object):
         committed twice.
         """
         with self.lock:
-            try:
-                cursor = self.db.cursor()
-                with closing(cursor):
+            with self.db:
+                with closing(self.db.cursor()) as cursor:
                     self.perform_ops(cursor)
                 self.db.commit()
-            except:
-                self.db.rollback()
-                raise
