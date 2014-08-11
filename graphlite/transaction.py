@@ -32,7 +32,10 @@ class Transaction(object):
 
         :param edge: The edge.
         """
-        self.ops.append((SQL.store, edge))
+        self.store_many((edge,))
+
+    def store_many(self, edges):
+        self.ops.append((SQL.store, edges))
 
     def delete(self, edge):
         """
@@ -42,7 +45,10 @@ class Transaction(object):
 
         :param edge: The edge.
         """
-        self.ops.append((SQL.remove, edge))
+        self.delete_many((edge,))
+
+    def delete_many(self, edges):
+        self.ops.append((SQL.remove, edges))
 
     def abort(self):
         """
@@ -69,12 +75,13 @@ class Transaction(object):
         :param cursor: The SQLite.Cursor object.
         """
         cursor.execute('BEGIN')
-        for operation, edge in self.ops:
-            cursor.execute(*operation(
-                src=edge.src,
-                rel=edge.rel,
-                dst=edge.dst,
-            ))
+        for operation, edges in self.ops:
+            for edge in edges:
+                cursor.execute(*operation(
+                    src=edge.src,
+                    rel=edge.rel,
+                    dst=edge.dst,
+                ))
 
     def commit(self):
         """

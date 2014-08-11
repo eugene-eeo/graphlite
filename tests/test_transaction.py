@@ -68,3 +68,16 @@ def test_transaction_abort(graph):
         tr.abort()
 
     assert V(1).knows(10) not in graph
+
+
+def test_transaction_multiple(graph):
+    to_delete = (2, 3, 4)
+    to_store = (6, 7, 8)
+
+    with graph.transaction() as tr:
+        tr.store_many(V(1).knows(n) for n in to_store)
+        tr.delete_many(V(1).knows(n) for n in to_delete)
+
+    for deleted, stored in zip(to_delete, to_store):
+        assert V(1).knows(deleted) not in graph
+        assert V(1).knows(stored) in graph
