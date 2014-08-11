@@ -35,6 +35,13 @@ class Transaction(object):
         self.store_many((edge,))
 
     def store_many(self, edges):
+        """
+        Store many edges into the database. Similar to the
+        :meth:`graphlite.transaction.Transaction.delete_many`
+        method.
+
+        :param edges: An iterable of edges to store.
+        """
         self.ops.append((SQL.store, edges))
 
     def delete(self, edge):
@@ -48,6 +55,14 @@ class Transaction(object):
         self.delete_many((edge,))
 
     def delete_many(self, edges):
+        """
+        Delete multiple edge queries from the database. Best
+        used when you have a fairly large generator that
+        shouldn't be loaded into memory at once for efficiency
+        reasons.
+
+        :param edges: An iterable of edge queries to delete.
+        """
         self.ops.append((SQL.remove, edges))
 
     def abort(self):
