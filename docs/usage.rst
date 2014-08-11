@@ -47,6 +47,15 @@ to store the documents, i.e. key-value.
         tr.store(V(2).knows(6))
         tr.store(V(6).knows(7))
 
+When your generator gets too large, it is often better to use the
+:meth:`graphlite.Graph.store_many` method because it's more
+efficient in terms of space:
+
+.. code-block:: python
+
+    with graph.transaction() as tr:
+        tr.store_many(V(1).knows(n) for n in range(2, 200))
+
 **Tip:** anything that modifies the graph (i.e. storage, removal)
 will be done within a transaction. This is partially because
 Graphlite is based on an SQLite backend and implementing transactions
@@ -139,3 +148,12 @@ from the table. Either way, an example would illustrate it best:
 
         # everything within the knows table
         tr.delete(V().knows)
+
+Similar to :meth:`graphlite.Graph.store_many` you should use the
+:meth:`graphlite.Graph.delete_many` method if you are deleting
+many specific nodes at once. For example:
+
+.. code-block:: python
+
+    with graph.transaction() as tr:
+        tr.delete_many(V(1).knows(i) for i in gen())
