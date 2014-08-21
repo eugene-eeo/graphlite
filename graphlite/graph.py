@@ -14,7 +14,7 @@ class Graph(object):
     :param uri: The URI of the SQLite file.
     :param graphs: Graphs to create.
     """
-    def __init__(self, uri, graphs=tuple()):
+    def __init__(self, uri, graphs=()):
         self.uri = uri
         self.db = Connection(
             database=uri,
