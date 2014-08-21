@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name='graphlite',
-    version='1.0.1',
+    version='1.0.2',
     packages=find_packages(),
     description='embedded graph datastore',
 

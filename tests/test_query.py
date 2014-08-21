@@ -36,3 +36,7 @@ def test_count(graph):
 def test_slice(graph):
     assert len(list(graph.find(V(1).knows)[:1])) == 1
     assert list(graph.find(V(1).knows)[1:]) == [3, 4]
+
+
+def test_limit(graph):
+    assert len(list(graph.find(V(1).knows).limit(2))) == 2
