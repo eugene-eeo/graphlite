@@ -109,9 +109,11 @@ class Query(object):
         :param statement: The SQL statements to append.
         :param params: The parameters to append.
         """
-        return Query(db=self.db,
-                     sql=self.sql + (statement,),
-                     params=self.params + params)
+        return Query(
+            db=self.db,
+            sql=self.sql + (statement,),
+            params=self.params + params,
+        )
 
     def __call__(self, edge):
         """
