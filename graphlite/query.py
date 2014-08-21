@@ -87,6 +87,10 @@ class Query(object):
         self.sql = sql
         self.params = params
 
+    @property
+    def statement(self):
+        return '\n'.join(self.sql)
+
     def __iter__(self):
         """
         Execute the internally stored SQL query and then
@@ -94,7 +98,7 @@ class Query(object):
         this function as many times as you want but it
         is not deterministic.
         """
-        statement = '\n'.join(self.sql)
+        statement = self.statement
         with closing(self.db.cursor()) as cursor:
             cursor.execute(statement, self.params)
             for item in cursor:
@@ -141,7 +145,7 @@ class Query(object):
             destination node is specified then the source
             nodes will be selected.
         """
-        query = '\n'.join(self.sql)
+        query = self.statement
         rel, dst = edge.rel, edge.dst
         statement, params = (
             SQL.compound_fwd_query(query, rel) if dst is None else
