@@ -89,6 +89,10 @@ class Query(object):
 
     @property
     def statement(self):
+        """
+        Joins all of the SQL queries together and then
+        returns the result. It is the query to be ran.
+        """
         return '\n'.join(self.sql)
 
     def __iter__(self):
@@ -98,9 +102,8 @@ class Query(object):
         this function as many times as you want but it
         is not deterministic.
         """
-        statement = self.statement
         with closing(self.db.cursor()) as cursor:
-            cursor.execute(statement, self.params)
+            cursor.execute(self.statement, self.params)
             for item in cursor:
                 yield item[0]
 
