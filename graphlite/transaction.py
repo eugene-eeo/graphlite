@@ -89,7 +89,6 @@ class Transaction(object):
 
         :param cursor: The SQLite.Cursor object.
         """
-        cursor.execute('BEGIN')
         for operation, edges in self.ops:
             for edge in edges:
                 cursor.execute(*operation(
