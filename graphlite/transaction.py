@@ -82,20 +82,20 @@ class Transaction(object):
         """
         return bool(self.ops)
 
-    def perform_ops(self, cursor):
+    def perform_ops(self):
         """
-        Performs the stored operations on the given
-        cursor object.
-
-        :param cursor: The SQLite.Cursor object.
+        Performs the stored operations on the database
+        connection. Only to be called when within a
+        lock by the ``commit`` method.
         """
-        for operation, edges in self.ops:
-            for edge in edges:
-                cursor.execute(*operation(
-                    src=edge.src,
-                    rel=edge.rel,
-                    dst=edge.dst,
-                ))
+        with closing(self.db.cursor()) as cursor:
+            for operation, edges in self.ops:
+                for edge in edges:
+                    cursor.execute(*operation(
+                        src=edge.src,
+                        rel=edge.rel,
+                        dst=edge.dst,
+                    ))
 
     def commit(self):
         """
@@ -107,5 +107,4 @@ class Transaction(object):
         """
         with self.lock:
             with self.db:
-                with closing(self.db.cursor()) as cursor:
-                    self.perform_ops(cursor)
+                self.perform_ops()
