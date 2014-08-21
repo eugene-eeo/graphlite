@@ -158,3 +158,8 @@ example:
 
     with graph.transaction() as tr:
         tr.delete_many(V(1).knows(i) for i in gen())
+
+Note that transactions are not locked, in a sense that the
+code within the ``with`` block is not ran in a thread lock.
+The lock will only be held during block exit, which is also
+when the transaction will be committed.
