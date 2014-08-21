@@ -205,12 +205,3 @@ class Query(object):
         :param sl: The slice object.
         """
         return islice(self, sl.start, sl.stop, sl.step)
-
-    def limit(self, max):
-        """
-        Limit the query to return at maxium *max*
-        number of nodes (rows).
-
-        :param max: The maximum.
-        """
-        return self.derived('LIMIT %d' % (max))
