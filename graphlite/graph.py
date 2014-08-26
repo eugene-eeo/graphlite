@@ -31,10 +31,10 @@ class Graph(object):
         :param graphs: The graphs to create.
         """
         with closing(self.db.cursor()) as cursor:
-            for item in graphs:
-                cursor.execute(SQL.CREATE_TABLE % (item))
+            for table in graphs:
+                cursor.execute(SQL.CREATE_TABLE % (table))
                 for index in SQL.INDEXES:
-                    cursor.execute(index % (item))
+                    cursor.execute(index % (table))
             self.db.commit()
 
     def close(self):

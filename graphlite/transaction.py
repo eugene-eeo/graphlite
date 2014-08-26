@@ -86,16 +86,18 @@ class Transaction(object):
         """
         Performs the stored operations on the database
         connection. Only to be called when within a
-        lock by the ``commit`` method.
+        lock and a database transaction by the
+        ``commit`` method.
         """
-        with closing(self.db.cursor()) as cursor:
-            for operation, edges in self.ops:
-                for edge in edges:
-                    cursor.execute(*operation(
-                        src=edge.src,
-                        rel=edge.rel,
-                        dst=edge.dst,
-                    ))
+        with self.db:
+            with closing(self.db.cursor()) as cursor:
+                for operation, edges in self.ops:
+                    for edge in edges:
+                        cursor.execute(*operation(
+                            src=edge.src,
+                            rel=edge.rel,
+                            dst=edge.dst,
+                        ))
 
     def commit(self):
         """
@@ -106,5 +108,4 @@ class Transaction(object):
         committed twice.
         """
         with self.lock:
-            with self.db:
-                self.perform_ops()
+            self.perform_ops()
