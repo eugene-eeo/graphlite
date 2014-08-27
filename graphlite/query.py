@@ -156,11 +156,9 @@ class Query(object):
             SQL.compound_fwd_query(query, rel) if dst is None else
             SQL.compound_inv_query(query, rel, dst)
         )
-        return Query(
-            db=self.db,
-            sql=(statement,),
-            params=self.params + params,
-        )
+        return Query(db=self.db,
+                     sql=(statement,),
+                     params=self.params + params)
 
     @property
     def intersection(self):
