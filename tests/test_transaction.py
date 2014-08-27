@@ -4,13 +4,6 @@ from sqlite3 import OperationalError
 from threading import Thread
 
 
-def threading_test(function, iterable):
-    threads = [Thread(target=function(x)) for x in iterable]
-
-    [thread.start() for thread in threads]
-    [thread.join() for thread in threads]
-
-
 def test_concurrency(graph):
     stored = [V(1).knows(i) for i in range(5, 9)]
 
@@ -20,7 +13,10 @@ def test_concurrency(graph):
                 tr.store(value)
         return callback
 
-    threading_test(store, stored)
+    threads = [Thread(target=store(x)) for x in stored]
+    [thread.start() for thread in threads]
+    [thread.join() for thread in threads]
+
     for item in stored:
         assert item in graph
 
