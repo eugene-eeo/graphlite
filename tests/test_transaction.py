@@ -24,11 +24,13 @@ def test_concurrency(graph):
 def test_delete(graph):
     queries = [
         V(1).knows(2),
+        V(1).likes,
         V().knows(3),
         V().knows,
     ]
     assertions = [
         lambda: V(1).knows(2) not in graph,
+        lambda: V(1).likes(2) not in graph,
         lambda: V(1).knows(3) not in graph,
         lambda: V(1).knows(4) not in graph,
     ]
