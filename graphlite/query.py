@@ -76,6 +76,8 @@ class V(object):
 
 
 class Query(object):
+    __slots__ = ('db', 'sql', 'params')
+
     """
     Create a new query object that acts on a particular
     SQLite connection instance.

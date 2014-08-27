@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS %s
 
 INDEXES = (
     'CREATE INDEX IF NOT EXISTS src_index ON %s ( src );',
-    'CREATE INDEX IF NOT EXISTS dst_index ON %s ( dst );'
+    'CREATE INDEX IF NOT EXISTS dst_index ON %s ( dst );',
 )
 
 
@@ -40,10 +40,13 @@ def remove(src, rel, dst):
     queries = []
     params = []
 
-    for query, item in (('src', src), ('dst', dst)):
-        if item is not None:
-            queries.append('%s = ?' % (query))
-            params.append(item)
+    if src is not None:
+        queries.append('src = ?')
+        params.append(src)
+
+    if dst is not None:
+        queries.append('dst = ?')
+        params.append(dst)
 
     if not queries:
         return smt, params
