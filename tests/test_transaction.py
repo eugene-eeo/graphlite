@@ -1,3 +1,4 @@
+import pytest
 from graphlite import V
 from graphlite.transaction import AbortSignal
 from sqlite3 import OperationalError
@@ -51,13 +52,11 @@ def test_transaction(graph):
 
 
 def test_transaction_atomic(graph):
-    try:
+    with pytest.raises(OperationalError):
         with graph.transaction() as tr:
             tr.store(V(1).knows(7))
             tr.store(V(1).does(1))
-        raise AssertionError
-    except OperationalError:
-        assert V(1).knows(7) not in graph
+    assert V(1).knows(7) not in graph
 
 
 def test_transaction_abort(graph):
