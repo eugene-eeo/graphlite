@@ -205,3 +205,13 @@ class Query(object):
         :param sl: The slice object.
         """
         return islice(self, sl.start, sl.stop, sl.step)
+
+    def to(self, datatype):
+        """
+        Converts this iterable into another *datatype*
+        by calling the provided datatype with the
+        instance as the sole argument.
+
+        :param datatype: The datatype.
+        """
+        return datatype(self)

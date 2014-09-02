@@ -56,6 +56,7 @@ def test_transaction_atomic(graph):
         with graph.transaction() as tr:
             tr.store(V(1).knows(7))
             tr.store(V(1).does(1))
+
     assert V(1).knows(7) not in graph
 
 
