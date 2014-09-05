@@ -29,17 +29,17 @@ def test_delete(graph):
         V().knows(3),
         V().knows,
     ]
-    assertions = [
-        lambda: V(1).knows(2) not in graph,
-        lambda: V(1).likes(2) not in graph,
-        lambda: V(1).knows(3) not in graph,
-        lambda: V(1).knows(4) not in graph,
+    edges = [
+        V(1).knows(2),
+        V(1).likes(2),
+        V(1).knows(3),
+        V(1).knows(4),
     ]
 
-    for assertion, query in zip(assertions, queries):
+    for edge, query in zip(edges, queries):
         with graph.transaction() as tr:
             tr.delete(query)
-        assert assertion()
+        assert edge not in graph
 
 
 def test_transaction(graph):
