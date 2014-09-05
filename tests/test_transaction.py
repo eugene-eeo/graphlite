@@ -5,7 +5,7 @@ from sqlite3 import OperationalError
 from threading import Thread
 
 
-def test_concurrency(graph):
+def test_transaction_concurrency(graph):
     stored = [V(1).knows(i) for i in range(5, 9)]
 
     def store(value):
@@ -22,7 +22,7 @@ def test_concurrency(graph):
         assert item in graph
 
 
-def test_delete(graph):
+def test_transaction_delete(graph):
     queries = [
         V(1).knows(2),
         V(1).likes,
@@ -42,7 +42,7 @@ def test_delete(graph):
         assert edge not in graph
 
 
-def test_transaction(graph):
+def test_transaction_store(graph):
     with graph.transaction() as tr:
         tr.store(V(1).knows(7))
         tr.store(V(1).knows(8))
@@ -78,7 +78,7 @@ def test_transaction_nested(graph):
     assert V(1).knows(5) not in graph
 
 
-def test_transaction_multiple(graph):
+def test_transaction_many(graph):
     to_delete = (2, 3, 4)
     to_store = (6, 7, 8)
 
