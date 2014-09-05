@@ -30,9 +30,6 @@ class V(object):
 
         :param attr: The attribute.
         """
-        values = self.__slots__
-        if attr in values:
-            return values[attr]
         self.rel = attr
         return self
 
