@@ -16,5 +16,5 @@ def graph(request):
                 tr.store(V(i).knows(1))
                 tr.store(V(1).likes(i))
 
-    request.addfinalizer(lambda: g.close())
+    request.addfinalizer(g.close)
     return g
