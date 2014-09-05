@@ -68,6 +68,16 @@ def test_transaction_abort(graph):
     assert V(1).knows(10) not in graph
 
 
+def test_transaction_nested(graph):
+    with pytest.raises(OperationalError):
+        with graph.transaction() as tr1:
+            with graph.transaction() as tr2:
+                tr2.store(V(1).does(2))
+            tr1.store(V(1).knows(5))
+
+    assert V(1).knows(5) not in graph
+
+
 def test_transaction_multiple(graph):
     to_delete = (2, 3, 4)
     to_store = (6, 7, 8)
