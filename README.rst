@@ -63,5 +63,6 @@ make sure you ``pip install pytest``. But you should.
 * **Maintainer**: `Eugene Eeo`_
 * **License**: MIT
 
-.. |Build| image:: https://img.shields.io/travis/eugene-eeo/graphlite.svg
+.. |Build| image:: https://img.shields.io/travis/eugene-eeo/graphlite.svg?style=flat
+    :target: https://travis-ci.org/eugene-eeo/graphlite/
 .. _Eugene Eeo: http://github.com/eugene-eeo
