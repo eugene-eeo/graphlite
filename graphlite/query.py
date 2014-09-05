@@ -134,10 +134,11 @@ class Query(object):
         :param edge: The edge query.
         """
         src, rel, dst = edge.src, edge.rel, edge.dst
-        return self.derived(*(
+        query, params = (
             SQL.forwards_relation(src, rel) if dst is None else
             SQL.inverse_relation(dst, rel)
-        ))
+        )
+        return self.derived(query, params)
 
     def traverse(self, edge):
         """
