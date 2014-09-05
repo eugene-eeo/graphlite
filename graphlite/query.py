@@ -112,8 +112,9 @@ class Query(object):
     def derived(self, statement, params=tuple()):
         """
         Returns a new query object set up correctly with
-        the current query object's statements and parameters
-        appended to the start of the new one.
+        the *statement* and *params* appended to the end
+        of the new instance's internal query and params,
+        along with the current instance's data.
 
         :param statement: The SQL statements to append.
         :param params: The parameters to append.
