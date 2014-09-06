@@ -4,8 +4,8 @@ from graphlite.query import V
 
 def connect(uri, graphs=()):
     """
-    Returns a Graph object with the given URI and
-    created graphs.
+    Returns a Graph object with the given *uri* and
+    created *graphs*.
 
     :param uri: The URI to the SQLite DB.
     :param graphs: The graphs to create.
