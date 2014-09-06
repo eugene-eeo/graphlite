@@ -43,6 +43,8 @@ class Graph(object):
         """
         self.db.close()
 
+    __del__ = close
+
     def __contains__(self, edge):
         """
         Checks if an edge exists within the database with
