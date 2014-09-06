@@ -24,7 +24,7 @@ works with datasets that you can fit into your SQLite database.
          .traverse(V().knows)\
          .to(list)
 
-    # => [2, 3, 4]
+    # => [5]
 
 Graphlite is thread safe, meaning that when transactions are
 comitted (at the end of the ``with`` block), a lock is held and
