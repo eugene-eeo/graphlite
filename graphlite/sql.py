@@ -13,6 +13,11 @@ INDEXES = (
 )
 
 
+difference = 'EXCEPT'
+intersection = 'INTERSECT'
+union = 'UNION'
+
+
 def store(src, rel, dst):
     """
     Returns an SQL statement to store an edge into

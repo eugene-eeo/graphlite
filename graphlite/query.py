@@ -166,7 +166,7 @@ class Query(object):
         The method doesn't process the objects in a
         loop/set but uses an SQL query.
         """
-        return self.derived('INTERSECT')
+        return self.derived(SQL.intersection)
 
     @property
     def difference(self):
@@ -176,7 +176,7 @@ class Query(object):
         explicitly not a `symmetric difference`.
         Similar to the :meth:``Query.intersection``
         """
-        return self.derived('EXCEPT')
+        return self.derived(SQL.difference)
 
     @property
     def union(self):
@@ -185,7 +185,7 @@ class Query(object):
         nodes and another query. Similar to the
         :meth:``Query.intersection``.
         """
-        return self.derived('UNION')
+        return self.derived(SQL.union)
 
     def count(self):
         """
