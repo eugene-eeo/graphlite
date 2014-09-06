@@ -52,8 +52,7 @@ class V(object):
     def __eq__(self, other):
         """
         Checks for equality between the edge and
-        another object- the other object needn't
-        be an edge.
+        another edge.
 
         :param other: The other thing.
         """
