@@ -57,8 +57,6 @@ class V(object):
 
         :param other: The other thing.
         """
-        if not isinstance(other, V):
-            return False
         return (self.src == other.src and
                 self.rel == other.rel and
                 self.dst == other.dst)

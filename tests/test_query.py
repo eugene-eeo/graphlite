@@ -42,3 +42,8 @@ def test_slice(graph):
 def test_to(graph):
     assert graph.find(V(1).knows).to(list) == [2, 3, 4]
     assert graph.find(V(1).knows).to(set) == set((2, 3, 4))
+
+
+def test_edge():
+    assert V(1).knows(2) == V(1).knows(2)
+    assert V(1).knows(3) != V(1).knows(2)
