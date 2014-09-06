@@ -16,7 +16,7 @@ class Transaction(object):
     until the transaction is committed.
 
     :param db: An SQLite connection.
-    :param lock: A threading.RLock instance.
+    :param lock: A threading.Lock instance.
     """
 
     def __init__(self, db, lock):

@@ -171,7 +171,8 @@ class Query(object):
         Compute the difference between the current
         selected nodes and the another query, and
         explicitly not a `symmetric difference`.
-        Similar to the :meth:``Query.intersection``
+        Similar in concept to
+        :meth:`graphlite.query.Query.intersection`.
         """
         return self.derived(SQL.difference)
 
@@ -180,7 +181,8 @@ class Query(object):
         """
         Compute the union between the current selected
         nodes and another query. Similar to the
-        :meth:``Query.intersection``.
+        :meth:`graphlite.query.Query.intersection`
+        method.
         """
         return self.derived(SQL.union)
 

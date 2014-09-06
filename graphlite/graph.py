@@ -11,7 +11,7 @@ class Graph(object):
     """
     Initializes a new Graph object.
 
-    :param uri: The URI of the SQLite file.
+    :param uri: The URI of the SQLite db.
     :param graphs: Graphs to create.
     """
     def __init__(self, uri, graphs=()):

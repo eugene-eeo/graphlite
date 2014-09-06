@@ -149,8 +149,8 @@ from the table. Either way, an example would illustrate it best:
         # everything within the knows table
         tr.delete(V().knows)
 
-Similar to :meth:`graphlite.transaction.Transaction.store_many`
-method, you should use the :meth:`graphlite.transaction.Transaction.delete_many`
+Similar to :func:`graphlite.transaction.Transaction.store_many`
+method, you should use the :func:`graphlite.transaction.Transaction.delete_many`
 method if you are deleting many specific nodes at once. For
 example:
 
