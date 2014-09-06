@@ -21,7 +21,10 @@ works with datasets that you can fit into your SQLite database.
     # of both 1 and 2?
     graph.find(V(1).knows)\
          .intersection(V(2).knows)\
-         .traverse(V().knows)
+         .traverse(V().knows)\
+         .to(list)
+
+    # => [2, 3, 4]
 
 Graphlite is thread safe, meaning that when transactions are
 comitted (at the end of the ``with`` block), a lock is held and
