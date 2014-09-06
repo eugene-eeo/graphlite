@@ -19,7 +19,6 @@ class Graph(object):
         self.db = Connection(
             database=uri,
             check_same_thread=False,
-            isolation_level='IMMEDIATE',
         )
         self.lock = Lock()
         self.setup_sql(graphs)
