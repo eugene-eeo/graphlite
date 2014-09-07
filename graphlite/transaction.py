@@ -109,3 +109,11 @@ class Transaction(object):
         """
         with self.lock:
             self.perform_ops()
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, type, value, traceback):
+        if not traceback and self.defined:
+            self.commit()
+        return isinstance(value, AbortSignal)

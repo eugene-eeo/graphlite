@@ -71,9 +71,5 @@ class Graph(object):
         be performed on the transaction object.
         """
         trans = Transaction(db=self.db, lock=self.lock)
-        try:
+        with trans:
             yield trans
-            if trans.defined:
-                trans.commit()
-        except AbortSignal:
-            pass
