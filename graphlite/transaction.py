@@ -103,15 +103,15 @@ class Transaction(object):
         """
         Commits the stored changes to the database.
         Note that you `do not` have to call this
-        function if you used the ``Graph.transaction``
-        context manager, or the transaction will be
-        committed twice.
+        function if you used the transaction object
+        as a context manager, or the transaction will
+        be committed twice.
         """
         with self.lock:
             self.perform_ops()
 
     def __enter__(self):
-        pass
+        return self
 
     def __exit__(self, type, value, traceback):
         if not traceback and self.defined:

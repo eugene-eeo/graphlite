@@ -63,13 +63,9 @@ class Graph(object):
         """
         return Query(self.db)
 
-    @contextmanager
     def transaction(self):
         """
-        A context manager that returns a Transaction
-        object to the caller. All operations must then
-        be performed on the transaction object.
+        Returns a Transaction object. All atomic operations
+        must then be performed on the transaction object.
         """
-        trans = Transaction(db=self.db, lock=self.lock)
-        with trans:
-            yield trans
+        return Transaction(db=self.db, lock=self.lock)

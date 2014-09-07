@@ -89,3 +89,9 @@ def test_transaction_many(graph):
     for deleted, stored in zip(to_delete, to_store):
         assert V(1).knows(deleted) not in graph
         assert V(1).knows(stored) in graph
+
+
+def test_transaction_isolation(graph):
+    with graph.transaction() as tr:
+        tr.store(V(1).knows(5))
+        assert V(1).knows(5) not in graph
