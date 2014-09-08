@@ -1,4 +1,4 @@
-from contextlib import closing, contextmanager
+from contextlib import closing
 from sqlite3 import Connection
 from threading import Lock
 
