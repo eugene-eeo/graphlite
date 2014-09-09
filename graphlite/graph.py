@@ -54,7 +54,7 @@ class Graph(object):
         """
         with closing(self.db.cursor()) as cursor:
             cursor.execute(*SQL.select_one(edge.src, edge.rel, edge.dst))
-            return bool(tuple(cursor))
+            return bool(cursor.fetchone())
 
     @property
     def find(self):
