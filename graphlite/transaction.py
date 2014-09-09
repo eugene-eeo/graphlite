@@ -111,9 +111,19 @@ class Transaction(object):
             self.perform_ops()
 
     def __enter__(self):
+        """
+        Enter a transaction, and returns the current
+        transaction object to the caller for
+        convenience.
+        """
         return self
 
     def __exit__(self, type, value, traceback):
+        """
+        Commits the transaction if no tracebacks or
+        exceptions were raised and if operations were
+        defined. Ignores ``AbortSignal``.
+        """
         if not traceback and self.defined:
             self.commit()
         return isinstance(value, AbortSignal)
