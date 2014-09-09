@@ -47,3 +47,12 @@ def test_to(graph):
 def test_edge():
     assert V(1).knows(2) == V(1).knows(2)
     assert V(1).knows(3) != V(1).knows(2)
+
+
+def test_hashing():
+    assert V(1).knows(2) != 2
+
+    d = {V(1).knows(2): 5}
+
+    assert d[V(1).knows(2)] == 5
+    assert not d.get(V(1).knows(3))

@@ -66,7 +66,7 @@ class V(object):
         hash the ``id`` integer, internal source,
         relation, and destination nodes.
         """
-        return hash((id(self), self.src, self.rel, self.dst))
+        return hash((self.src, self.rel, self.dst))
 
 
 class Query(object):
