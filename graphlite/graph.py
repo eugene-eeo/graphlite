@@ -68,4 +68,4 @@ class Graph(object):
         Returns a Transaction object. All atomic operations
         must then be performed on the transaction object.
         """
-        return Transaction(db=self.db, lock=self.lock)
+        return Transaction(self.db, lock=self.lock)
