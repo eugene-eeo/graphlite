@@ -56,9 +56,10 @@ class V(object):
 
         :param other: The other thing.
         """
-        return (self.src == other.src and
-                self.rel == other.rel and
-                self.dst == other.dst)
+        return (isinstance(other, V) and
+                (self.src == other.src and
+                 self.rel == other.rel and
+                 self.dst == other.dst))
 
     def __hash__(self):
         """
