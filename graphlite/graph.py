@@ -4,7 +4,7 @@ from threading import Lock
 
 import graphlite.sql as SQL
 from graphlite.query import Query
-from graphlite.transaction import Transaction, AbortSignal
+from graphlite.transaction import Transaction
 
 
 class Graph(object):
