@@ -101,8 +101,8 @@ class Query(object):
         """
         with closing(self.db.cursor()) as cursor:
             cursor.execute(self.statement, self.params)
-            for item in cursor:
-                yield item[0]
+            for row in cursor:
+                yield row[0]
 
     def derived(self, statement, params=tuple()):
         """
