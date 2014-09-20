@@ -1,10 +1,10 @@
 .. image:: https://raw.github.com/eugene-eeo/graphlite/master/art/logo-300.png
    :alt: Graphlite
 
-Graphlite is a tiny graph datastore that stores adjacency lists
-similar to FlockDB but like conventional graph databases, allow
-you to query them with traversals (graph-walking queries), and
-works with datasets that you can fit into your SQLite database.
+Graphlite is an embedded graph datastore that stores adjacency
+lists similar to FlockDB but like conventional graph databases,
+allow you to query them with traversals (graph-walking queries),
+and works with datasets that you can fit into SQLite.
 
 .. code-block:: python
 
