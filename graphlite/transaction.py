@@ -91,6 +91,7 @@ class Transaction(object):
         """
         with self.db:
             with closing(self.db.cursor()) as cursor:
+                cursor.execute(SQL.begin)
                 for operation, edges in self.ops:
                     for edge in edges:
                         cursor.execute(*operation(
