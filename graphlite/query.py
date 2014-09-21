@@ -105,7 +105,7 @@ class Query(object):
             for row in cursor:
                 yield row[0]
 
-    def derived(self, statement, params=tuple()):
+    def derived(self, statement, params=()):
         """
         Returns a new query object set up correctly with
         the *statement* and *params* appended to the end
