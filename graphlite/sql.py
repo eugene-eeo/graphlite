@@ -116,7 +116,7 @@ def compound_inv_query(query, rel, dst):
     :meth:``compound_fw_query`` but only selects
     the source nodes given a destination node.
 
-    :param query: The subquery.
+    :param query: The SQL subquery.
     :param rel: The relation.
     :param dst: The destination node.
     """
