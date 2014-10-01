@@ -162,4 +162,8 @@ example:
 Note that transactions are not locked, in a sense that the
 code within the ``with`` block is not ran in a thread lock.
 The lock will only be held during block exit, which is also
-when the transaction will be committed.
+when the transaction will be committed. Also, nested transactions
+are **not** recommended. They will not be treated as a
+single atomic operation since there is no way to enforce
+atomicity when we have multiple transactions within a
+transaction.
