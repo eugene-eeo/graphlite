@@ -1,3 +1,14 @@
+"""
+    graphlite
+    ~~~~~~~~~
+    A pure-Python embedded graph datastore built
+    on SQLite.
+
+    :copyright: (c) 2014 by Eugene Eeo.
+    :license: MIT, see LICENSE for more details.
+"""
+
+
 from graphlite.graph import Graph
 from graphlite.query import V
 
