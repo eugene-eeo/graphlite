@@ -55,4 +55,4 @@ def test_hashing():
     d = {V(1).knows(2): 5}
 
     assert d[V(1).knows(2)] == 5
-    assert not d.get(V(1).knows(3))
+    assert V(1).knows(3) not in d

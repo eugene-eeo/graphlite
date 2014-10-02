@@ -45,7 +45,7 @@ class V(object):
     def __repr__(self):
         return '(%s)-[%s]->(%s)' % (
             '*' if self.src is None else self.src,
-            '*' if self.rel is None else ':%s' % (self.rel),
+            '*' if self.rel is None else ':%s' % self.rel,
             '*' if self.dst is None else self.dst,
         )
 
