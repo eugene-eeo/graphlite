@@ -80,7 +80,7 @@ class Query(object):
 
     :param db: The SQLite connection.
     """
-    def __init__(self, db, sql=tuple(), params=tuple()):
+    def __init__(self, db, sql=(), params=()):
         self.db = db
         self.sql = sql
         self.params = params
