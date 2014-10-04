@@ -49,7 +49,7 @@ def test_edge():
     assert V(1).knows(3) != V(1).knows(2)
 
 
-def test_hashing():
+def test_hashable():
     assert V(1).knows(2) != 2
 
     d = {V(1).knows(2): 5}
