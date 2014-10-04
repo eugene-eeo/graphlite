@@ -1,8 +1,8 @@
 """
     graphlite
     ~~~~~~~~~
-    A pure-Python embedded graph datastore built
-    on SQLite.
+    A pure-Python embedded graph datastore built on
+    top of SQLite.
 
     :copyright: (c) 2014 by Eugene Eeo.
     :license: MIT, see LICENSE for more details.
