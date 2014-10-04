@@ -16,7 +16,7 @@ INDEXES = (
 difference = 'EXCEPT'
 intersection = 'INTERSECT'
 union = 'UNION'
-begin = 'BEGIN'
+begin = 'BEGIN TRANSACTION'
 
 
 def store(src, rel, dst):

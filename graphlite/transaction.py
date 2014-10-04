@@ -108,6 +108,8 @@ class Transaction(object):
         as a context manager, or the transaction will
         be committed twice.
         """
+        if not self.defined:
+            return
         with self.lock:
             self.perform_ops()
 
@@ -125,6 +127,6 @@ class Transaction(object):
         exceptions were raised and if operations were
         defined. Ignores ``AbortSignal``.
         """
-        if not traceback and self.defined:
+        if not traceback:
             self.commit()
         return isinstance(value, AbortSignal)
