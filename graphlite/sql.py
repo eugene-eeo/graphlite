@@ -122,3 +122,9 @@ def compound_inv_query(query, rel, dst):
     """
     smt = 'SELECT src FROM %s WHERE src IN (%s) AND dst = ?'
     return smt % (rel, query), (dst,)
+
+
+def limit(sl):
+    limit, offset = sl.stop or -1, sl.start or 0
+    smt = 'LIMIT %d OFFSET %d' % (limit, offset)
+    return smt, ()

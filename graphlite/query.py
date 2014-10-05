@@ -204,7 +204,13 @@ class Query(object):
 
         :param sl: The slice object.
         """
-        return islice(self, sl.start, sl.stop, sl.step)
+        smt, params = SQL.limit(sl)
+        return islice(
+            self.derived(smt, params),
+            None,
+            None,
+            sl.step
+        )
 
     def to(self, datatype):
         """
