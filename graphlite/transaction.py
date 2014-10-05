@@ -108,10 +108,9 @@ class Transaction(object):
         as a context manager, or the transaction will
         be committed twice.
         """
-        if not self.defined:
-            return
-        with self.lock:
-            self.perform_ops()
+        if self.defined:
+            with self.lock:
+                self.perform_ops()
 
     def __enter__(self):
         """
