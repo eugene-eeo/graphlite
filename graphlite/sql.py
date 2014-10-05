@@ -124,14 +124,15 @@ def compound_inv_query(query, rel, dst):
     return smt % (rel, query), (dst,)
 
 
-def limit(sl):
+def limit(start, stop):
     """
-    Returns a LIMIT statement that takes the
-    slice into account.
+    Returns a SQlite-compliant LIMIT statement
+    that takes the *start* and *stop* into
+    account, also taking into account the fact
+    that these values are from a slice object.
 
     :param sl: The slice object.
     """
-    start, stop = sl.start, sl.stop
     offset = start or 0
     limit = (stop - offset) if stop else -1
     smt = 'LIMIT %d OFFSET %d' % (limit, offset)

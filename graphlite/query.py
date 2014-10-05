@@ -204,7 +204,7 @@ class Query(object):
 
         :param sl: The slice object.
         """
-        smt, params = SQL.limit(sl)
+        smt, params = SQL.limit(sl.start, sl.stop)
         return islice(
             self.derived(smt, params),
             None,
