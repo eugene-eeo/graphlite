@@ -131,7 +131,8 @@ def limit(start, stop):
     account, also taking into account the fact
     that these values are from a slice object.
 
-    :param sl: The slice object.
+    :param start: The lower bound.
+    :param stop: The upper bound.
     """
     offset = start or 0
     limit = (stop - offset) if stop else -1
