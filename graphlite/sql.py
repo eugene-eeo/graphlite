@@ -125,6 +125,14 @@ def compound_inv_query(query, rel, dst):
 
 
 def limit(sl):
-    limit, offset = sl.stop or -1, sl.start or 0
+    """
+    Returns a LIMIT statement that takes the
+    slice into account.
+
+    :param sl: The slice object.
+    """
+    start, stop = sl.start, sl.stop
+    offset = start or 0
+    limit = (stop - offset) if stop else -1
     smt = 'LIMIT %d OFFSET %d' % (limit, offset)
     return smt, ()

@@ -126,6 +126,10 @@ first five people that 1 knows:
 
     graph.find(V(1).knows)[:5]
 
+Note that you can only iterate over the iterable, because internally
+Graphlite uses the ``itertools.islice`` function to generate an
+iterable that takes the slice into account.
+
 --------------
 Deleting Edges
 --------------
