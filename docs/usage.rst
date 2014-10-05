@@ -131,11 +131,11 @@ Graphlite uses the ``itertools.islice`` function to generate an
 iterable that takes the slice into account. Basically, the need to
 do this is because we:
 
- - Need to take ``slice.step`` into account
- - Want to prevent people from doing queries like
-   ``graph.find(...)[1:].union(...)`` because these are not allowed
-   in SQLite, as only the rightmost select can contain a ``LIMIT``
-   statement.
+- Need to take ``slice.step`` into account
+- Want to prevent people from doing queries like
+  ``graph.find(...)[1:].union(...)`` because these are not allowed
+  in SQLite, as only the rightmost select can contain a ``LIMIT``
+  statement.
 
 --------------
 Deleting Edges
