@@ -105,12 +105,12 @@ class Transaction(object):
         Commits the stored changes to the database.
         Note that you `do not` have to call this
         function if you used the transaction object
-        as a context manager, or the transaction will
-        be committed twice.
+        as a context manager.
         """
         if self.defined:
             with self.lock:
                 self.perform_ops()
+            del self.ops[:]
 
     def __enter__(self):
         """
