@@ -113,8 +113,8 @@ def compound_fwd_query(query, rel):
 def compound_inv_query(query, rel, dst):
     """
     Create a compound inverse query, similar to
-    :meth:``compound_fw_query`` but only selects
-    the source nodes given a destination node.
+    :meth:``compound_fw_query`` but only selects the
+    source nodes given a destination node.
 
     :param query: The SQL subquery.
     :param rel: The relation.
@@ -126,11 +126,10 @@ def compound_inv_query(query, rel, dst):
 
 def limit(start, stop):
     """
-    Returns a SQlite-compliant LIMIT statement
-    that takes the *start* and *stop* into
-    account, also taking into account the fact
-    that these values are lower and upper
-    bounds.
+    Returns a SQlite-compliant LIMIT statement that
+    takes the *start* and *stop* into account, also
+    taking into account the fact that these values are
+    lower and upper bounds.
 
     :param start: The lower bound.
     :param stop: The upper bound.

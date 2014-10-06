@@ -209,7 +209,7 @@ class Query(object):
             self.derived(smt, params),
             None,
             None,
-            sl.step
+            sl.step,
         )
 
     def to(self, datatype):
