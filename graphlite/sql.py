@@ -124,17 +124,17 @@ def compound_inv_query(query, rel, dst):
     return smt % (rel, query), (dst,)
 
 
-def limit(start, stop):
+def limit(lower, upper):
     """
     Returns a SQlite-compliant LIMIT statement that
     takes the *start* and *stop* into account, also
     taking into account the fact that these values are
     lower and upper bounds.
 
-    :param start: The lower bound.
-    :param stop: The upper bound.
+    :param lower: The lower bound.
+    :param upper: The upper bound.
     """
-    offset = start or 0
-    limit = (stop - offset) if stop else -1
+    offset = lower or 0
+    limit = (upper - offset) if upper else -1
     smt = 'LIMIT %d OFFSET %d' % (limit, offset)
     return smt, ()
