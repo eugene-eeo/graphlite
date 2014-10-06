@@ -129,7 +129,8 @@ def limit(start, stop):
     Returns a SQlite-compliant LIMIT statement
     that takes the *start* and *stop* into
     account, also taking into account the fact
-    that these values are from a slice object.
+    that these values are lower and upper
+    bounds.
 
     :param start: The lower bound.
     :param stop: The upper bound.
