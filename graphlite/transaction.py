@@ -110,7 +110,7 @@ class Transaction(object):
         if self.defined:
             with self.lock:
                 self.perform_ops()
-            del self.ops[:]
+                del self.ops[:]
 
     def __enter__(self):
         """
