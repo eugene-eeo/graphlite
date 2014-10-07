@@ -98,7 +98,7 @@ class Query(object):
         Execute the internally stored SQL query and then
         yield every result to the caller. You can reuse
         this function as many times as you want but it
-        is not deterministic.
+        may not return the same values.
         """
         with closing(self.db.cursor()) as cursor:
             cursor.execute(self.statement, self.params)
@@ -110,7 +110,7 @@ class Query(object):
         Returns a new query object set up correctly with
         the *statement* and *params* appended to the end
         of the new instance's internal query and params,
-        along with the current instance's data.
+        along with the current instance's connection.
 
         :param statement: The SQL statements to append.
         :param params: The parameters to append.
@@ -142,7 +142,7 @@ class Query(object):
         Traverse the graph, and selecting the destination
         nodes for a particular relation that the selected
         nodes are a source of, i.e. select the friends of
-        my friends.
+        my friends. You can traverse indefinitely.
 
         :param edge: The edge object. If the edge's
             destination node is specified then the source
@@ -172,8 +172,8 @@ class Query(object):
         """
         Compute the difference between the current
         selected nodes and the another query, and
-        explicitly not a `symmetric difference`.
-        Similar in concept to
+        not a `symmetric difference`. Similar in
+        implementation to
         :meth:`graphlite.query.Query.intersection`.
         """
         return self.derived(SQL.difference)
