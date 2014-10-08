@@ -100,20 +100,26 @@ class Transaction(object):
                             dst=edge.dst,
                         ))
 
+    def clear(self):
+        """
+        Clear the internal record of changes by
+        deleting the elements of the list to
+        free memory.
+        """
+        del self.ops[:]
+
     def commit(self):
         """
         Commits the stored changes to the database.
         Note that you `do not` have to call this
         function if you used the transaction object
         as a context manager. Note that a transaction
-        can only be committed once- after committing
-        all internal changes will be cleared to save
-        memory.
+        can only be committed once.
         """
         if self.defined:
             with self.lock:
                 self.perform_ops()
-                del self.ops[:]
+                self.clear()
 
     def __enter__(self):
         """
