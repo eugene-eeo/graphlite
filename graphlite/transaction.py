@@ -61,7 +61,8 @@ class Transaction(object):
         shouldn't be loaded into memory at once for efficiency
         reasons.
 
-        :param edges: An iterable of edge queries to delete.
+        :param edges: An iterable of edges or ``Graph.find``
+            style edge queries to delete.
         """
         self.ops.append((SQL.remove, edges))
 
