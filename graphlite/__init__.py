@@ -21,4 +21,4 @@ def connect(uri, graphs=()):
     :param uri: The URI to the SQLite DB.
     :param graphs: The graphs to create.
     """
-    return Graph(uri=uri, graphs=graphs)
+    return Graph(uri, graphs)
