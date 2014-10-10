@@ -48,8 +48,8 @@ class Graph(object):
 
     def __contains__(self, edge):
         """
-        Checks if an edge exists within the database with
-        the given source and destination nodes.
+        Checks if an edge exists within the database
+        with the given source and destination nodes.
 
         :param edge: The edge to query.
         """
@@ -60,13 +60,14 @@ class Graph(object):
     @property
     def find(self):
         """
-        Returns a Query object.
+        Returns a Query object that acts on the graph.
         """
         return Query(self.db)
 
     def transaction(self):
         """
-        Returns a Transaction object. All atomic operations
-        must then be performed on the transaction object.
+        Returns a Transaction object. All modifying
+        operations, i.e. ``store``, ``delete`` must
+        then be performed on the transaction object.
         """
         return Transaction(self.db, self.lock)
