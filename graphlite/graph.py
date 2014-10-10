@@ -2,9 +2,9 @@ from contextlib import closing
 from sqlite3 import Connection
 from threading import Lock
 
-import graphlite.sql as SQL
 from graphlite.query import Query
 from graphlite.transaction import Transaction
+import graphlite.sql as SQL
 
 
 class Graph(object):
