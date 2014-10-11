@@ -29,7 +29,7 @@ def store(src, rel, dst):
     :param dst: The destination node.
     """
     smt = 'INSERT INTO %s (src, dst) VALUES (?, ?)'
-    return (smt % (rel)), (src, dst)
+    return smt % rel, (src, dst)
 
 
 def remove(src, rel, dst):
@@ -42,7 +42,7 @@ def remove(src, rel, dst):
     :param rel: The relation.
     :param dst: The destination node.
     """
-    smt = 'DELETE FROM %s' % (rel)
+    smt = 'DELETE FROM %s' % rel
     queries = []
     params = []
 
@@ -69,7 +69,7 @@ def forwards_relation(src, rel):
     :param rel: The relation.
     """
     statement = 'SELECT dst FROM %s WHERE src = ?'
-    return statement % (rel), (src,)
+    return statement % rel, (src,)
 
 
 def inverse_relation(dst, rel):
@@ -81,7 +81,7 @@ def inverse_relation(dst, rel):
     :param rel: The relation.
     """
     statement = 'SELECT src FROM %s WHERE dst = ?'
-    return statement % (rel), (dst,)
+    return statement % rel, (dst,)
 
 
 def select_one(src, rel, dst):
@@ -94,7 +94,7 @@ def select_one(src, rel, dst):
     :param dst: The destination node.
     """
     smt = 'SELECT id FROM %s WHERE src = ? AND dst = ? LIMIT 1'
-    return smt % (rel), (src, dst)
+    return smt % rel, (src, dst)
 
 
 def compound_fwd_query(query, rel):
@@ -107,7 +107,7 @@ def compound_fwd_query(query, rel):
     :param rel: The relation.
     """
     smt = 'SELECT dst FROM %s WHERE src IN (%s)'
-    return smt % (rel, query), tuple()
+    return smt % (rel, query), ()
 
 
 def compound_inv_query(query, rel, dst):
