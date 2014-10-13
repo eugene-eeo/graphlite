@@ -101,14 +101,6 @@ class Transaction(object):
                             dst=edge.dst,
                         ))
 
-    def clear(self):
-        """
-        Clear the internal record of changes by
-        deleting the elements of the list to
-        free memory.
-        """
-        del self.ops[:]
-
     def commit(self):
         """
         Commits the stored changes to the database.
@@ -120,7 +112,6 @@ class Transaction(object):
         if self.defined:
             with self.lock:
                 self.perform_ops()
-                self.clear()
 
     def __enter__(self):
         """

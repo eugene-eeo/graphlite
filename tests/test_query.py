@@ -45,6 +45,7 @@ def test_to(graph):
 
 
 def test_edge():
+    assert not V(1).knows(2) == 3
     assert V(1).knows(2) == V(1).knows(2)
     assert V(1).knows(3) != V(1).knows(2)
 
