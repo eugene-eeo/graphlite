@@ -101,6 +101,9 @@ class Transaction(object):
                             dst=edge.dst,
                         ))
 
+    def clear(self):
+        del self.ops[:]
+
     def commit(self):
         """
         Commits the stored changes to the database.
@@ -112,6 +115,7 @@ class Transaction(object):
         if self.defined:
             with self.lock:
                 self.perform_ops()
+                self.clear()
 
     def __enter__(self):
         """
