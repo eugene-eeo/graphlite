@@ -24,16 +24,6 @@ class Transaction(object):
         self.lock = lock
         self.ops = []
 
-    def store(self, edge):
-        """
-        Store an edge in the database. Both the source
-        and destination nodes must be specified, as
-        well as the relation.
-
-        :param edge: The edge.
-        """
-        self.store_many((edge,))
-
     def store_many(self, edges):
         """
         Store many edges into the database. Similar to the
@@ -43,16 +33,6 @@ class Transaction(object):
         :param edges: An iterable of edges to store.
         """
         self.ops.append((SQL.store, edges))
-
-    def delete(self, edge):
-        """
-        Deletes an edge from the database. Either the
-        source node or destination node `may` be specified,
-        but the relation has to be specified.
-
-        :param edge: The edge.
-        """
-        self.delete_many((edge,))
 
     def delete_many(self, edges):
         """
@@ -65,6 +45,26 @@ class Transaction(object):
             style edge queries to delete.
         """
         self.ops.append((SQL.remove, edges))
+
+    def store(self, edge):
+        """
+        Store an edge in the database. Both the source
+        and destination nodes must be specified, as
+        well as the relation.
+
+        :param edge: The edge.
+        """
+        self.store_many((edge,))
+
+    def delete(self, edge):
+        """
+        Deletes an edge from the database. Either the
+        source node or destination node `may` be specified,
+        but the relation has to be specified.
+
+        :param edge: The edge.
+        """
+        self.delete_many((edge,))
 
     def abort(self):
         """

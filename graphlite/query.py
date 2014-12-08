@@ -105,19 +105,21 @@ class Query(object):
             for row in cursor:
                 yield row[0]
 
-    def derived(self, statement, params=()):
+    def derived(self, statement, params=(), replace=False):
         """
         Returns a new query object set up correctly with
         the *statement* and *params* appended to the end
         of the new instance's internal query and params,
         along with the current instance's connection.
 
-        :param statement: The SQL statements to append.
+        :param statement: The SQL query string to append.
         :param params: The parameters to append.
+        :param replace: Whether to replace the entire
+            SQL query.
         """
         return Query(
             db=self.db,
-            sql=self.sql + (statement,),
+            sql=(statement,) if replace else (self.sql + (statement,)),
             params=self.params + params,
         )
 
@@ -144,7 +146,7 @@ class Query(object):
         nodes are a source of, i.e. select the friends of
         my friends. You can traverse indefinitely.
 
-        :param edge: The edge object. If the edge's
+        :param edge: The edge query. If the edge's
             destination node is specified then the source
             nodes will be selected.
         """
@@ -154,16 +156,13 @@ class Query(object):
             SQL.compound_fwd_query(query, rel) if dst is None else
             SQL.compound_inv_query(query, rel, dst)
         )
-        return Query(db=self.db,
-                     sql=(statement,),
-                     params=self.params + params)
+        return self.derived(statement, params, replace=True)
 
     @property
     def intersection(self):
         """
-        Intersect the current query with another one.
-        The method doesn't process the objects in a
-        loop/set but uses an SQL query.
+        Intersect the current query with another one
+        using an SQL INTERSECT.
         """
         return self.derived(SQL.intersection)
 
