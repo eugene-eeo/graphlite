@@ -28,6 +28,13 @@ def test_traverse(graph):
                      .traverse(V().knows(1))) == [2, 3]
 
 
+def test_nested_traverse(graph):
+    query = graph.find(V(1).likes)\
+                 .traverse(V().knows)\
+                 .traverse(V().knows)
+    assert query.to(list) == [2, 3, 4]
+
+
 def test_count(graph):
     assert graph.find(V(1).knows).count() == 3
     assert graph.find(V(1).likes).count() == 2
