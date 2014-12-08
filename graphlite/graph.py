@@ -55,7 +55,7 @@ class Graph(object):
         """
         with closing(self.db.cursor()) as cursor:
             cursor.execute(*SQL.select_one(edge.src, edge.rel, edge.dst))
-            return cursor.fetchone() is not None
+            return bool(cursor.fetchall())
 
     @property
     def find(self):
