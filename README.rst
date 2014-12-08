@@ -18,7 +18,7 @@ an SQLite DB.
     ...         db.store(g.V(1).knows(person))
     ...
 
-    >>> db.find(V(1).knows).to(list)
+    >>> db.find(g.V(1).knows).to(list)
     [2, 3]
 
 Graphlite inherits it's API from that of FlockDB's. It doesn't
