@@ -105,7 +105,7 @@ class Query(object):
             for row in cursor:
                 yield row[0]
 
-    def derived(self, statement, params=(), replace=False):
+    def derived(self, statement, params=(), replace_sql=False, replace_params=False):
         """
         Returns a new query object set up correctly with
         the *statement* and *params* appended to the end
@@ -114,13 +114,17 @@ class Query(object):
 
         :param statement: The SQL query string to append.
         :param params: The parameters to append.
-        :param replace: Whether to replace the entire
+        :param replace_sql: Whether to replace the entire
             SQL query.
+        :param replace_params: Whether to replace all
+            parameters.
         """
+        smts = () if replace_sql else self.sql
+        args = () if replace_params else self.params
         return Query(
             db=self.db,
-            sql=(statement,) if replace else (self.sql + (statement,)),
-            params=self.params + params,
+            sql=smts + (statement,),
+            params=args + params,
         )
 
     def __call__(self, edge):
@@ -156,7 +160,7 @@ class Query(object):
             SQL.compound_fwd_query(query, rel) if dst is None else
             SQL.compound_inv_query(query, rel, dst)
         )
-        return self.derived(statement, params, replace=True)
+        return self.derived(statement, params, replace_sql=True)
 
     @property
     def intersection(self):
