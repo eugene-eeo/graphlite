@@ -72,6 +72,7 @@ class Transaction(object):
         ``Graph.transaction`` context manager this
         exception is automatically caught and ignored.
         """
+        self.clear()
         raise AbortSignal
 
     @property
@@ -95,13 +96,14 @@ class Transaction(object):
                 cursor.execute(SQL.begin)
                 for operation, edges in self.ops:
                     for edge in edges:
-                        cursor.execute(*operation(
-                            src=edge.src,
-                            rel=edge.rel,
-                            dst=edge.dst,
-                        ))
+                        args = edge.to_dict()
+                        cursor.execute(*operation(**args))
 
     def clear(self):
+        """
+        Clears all the operations registered on the
+        transaction object.
+        """
         del self.ops[:]
 
     def commit(self):
@@ -112,10 +114,11 @@ class Transaction(object):
         as a context manager. Note that a transaction
         can only be committed once.
         """
-        if self.defined:
+        try:
             with self.lock:
                 self.perform_ops()
-                self.clear()
+        finally:
+            self.clear()
 
     def __enter__(self):
         """
@@ -131,6 +134,6 @@ class Transaction(object):
         exceptions were raised and if operations were
         defined. Ignores ``AbortSignal``.
         """
-        if not traceback:
+        if not traceback and self.defined:
             self.commit()
         return isinstance(value, AbortSignal)
