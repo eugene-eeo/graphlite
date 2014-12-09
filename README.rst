@@ -3,10 +3,13 @@
 
 |Build| |Downloads|
 
-Graphlite is an MIT-licensed embedded graph datastore for Python
-built on top of SQLite. It stores adjacency lists but allows for
-traversals and works with whatever dataset that you can fit into
-an SQLite DB.
+Graphlite is an MIT-licensed graph DB for Python.
+
+There are currently no embedded graph databases for Python.
+Graphlite aims to change that by building a simple and fast
+graph layer over SQLite. Similar to FlockDB, Graphlite only
+stores adjacency lists, but they can be queried in the style
+of normal graph databases, e.g. with traversals.
 
 .. code-block:: pycon
 
@@ -21,10 +24,11 @@ an SQLite DB.
     >>> db.find(g.V(1).knows).to(list)
     [2, 3]
 
-Graphlite inherits it's API from that of FlockDB's. It doesn't
-provide any method for storing an object into the database, but
-only supports retrieving and storing integers (nodes) which can
-mean anything in the context of your application.
+Graphlite inherits it's API from that of FlockDB's. Also, like
+FlockDB Graphlite only stores the relations between the nodes,
+which are integers- not the data of the nodes themselves. You
+will therefore need a high performance database like BerkleyDB
+or one of the **dbm** implementations to store your data.
 
 
 Features
