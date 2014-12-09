@@ -1,4 +1,4 @@
-.. image:: https://raw.github.com/eugene-eeo/graphlite/master/art/graphlite-logo.png
+.. image:: https://raw.github.com/eugene-eeo/graphlite/master/art/logo.png
    :alt: Graphlite
 
 |Build| |Downloads|
