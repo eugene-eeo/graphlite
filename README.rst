@@ -14,7 +14,7 @@ of normal graph databases, e.g. with traversals.
 .. code-block:: pycon
 
     >>> import graphlite as g
-    >>> db = g.connect(':memory:')
+    >>> db = g.connect(':memory:', graphs=['knows'])
 
     >>> with db.transaction():
     ...     for person in [2, 3]:
