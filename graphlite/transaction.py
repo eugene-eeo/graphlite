@@ -96,8 +96,11 @@ class Transaction(object):
                 cursor.execute(SQL.begin)
                 for operation, edges in self.ops:
                     for edge in edges:
-                        args = edge.to_dict()
-                        cursor.execute(*operation(**args))
+                        cursor.execute(*operation(
+                            src=edge.src,
+                            rel=edge.rel,
+                            dst=edge.dst,
+                        ))
 
     def clear(self):
         """

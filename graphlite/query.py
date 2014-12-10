@@ -70,13 +70,6 @@ class V(object):
         """
         return hash((self.src, self.rel, self.dst))
 
-    def to_dict(self):
-        return dict(
-            src=self.src,
-            dst=self.dst,
-            rel=self.rel,
-            )
-
 
 class Query(object):
     __slots__ = ('db', 'sql', 'params')
