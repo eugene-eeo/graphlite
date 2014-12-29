@@ -22,14 +22,6 @@ class V(object):
         self.dst = dst
 
     def __getattr__(self, attr):
-        """
-        If the attribute being requested is found in the
-        ``__slots__`` attribute, then return the actual
-        thing, else assign the attribute as an internally
-        stored relation.
-
-        :param attr: The attribute.
-        """
         self.rel = attr
         return self
 
@@ -50,12 +42,6 @@ class V(object):
         )
 
     def __eq__(self, other):
-        """
-        Checks for equality between the edge and
-        another edge.
-
-        :param other: The other thing.
-        """
         if not isinstance(other, V):
             return NotImplemented
         return (self.src == other.src and
@@ -63,12 +49,12 @@ class V(object):
                 self.dst == other.dst)
 
     def __hash__(self):
-        """
-        Uses Python's tuple hashing algorithm to
-        hash the ``id`` integer, internal source,
-        relation, and destination nodes.
-        """
         return hash((self.src, self.rel, self.dst))
+
+    def gen_query(self):
+        if self.src is None:
+            return SQL.inverse_relation(self.dst, self.rel)
+        return SQL.forwards_relation(self.src, self.rel)
 
 
 class Query(object):
@@ -133,12 +119,8 @@ class Query(object):
 
         :param edge: The edge query.
         """
-        src, rel, dst = edge.src, edge.rel, edge.dst
-        statement, params = (
-            SQL.forwards_relation(src, rel) if dst is None else
-            SQL.inverse_relation(dst, rel)
-        )
-        return self.derived(statement, params)
+        smt, params = edge.gen_query()
+        return self.derived(smt, params)
 
     def traverse(self, edge):
         """
