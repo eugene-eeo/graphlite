@@ -52,9 +52,9 @@ class V(object):
         return hash((self.src, self.rel, self.dst))
 
     def gen_query(self):
-        if self.src is None:
-            return SQL.inverse_relation(self.dst, self.rel)
-        return SQL.forwards_relation(self.src, self.rel)
+        if self.dst is None:
+            return SQL.forwards_relation(self.src, self.rel)
+        return SQL.inverse_relation(self.dst, self.rel)
 
 
 class Query(object):
