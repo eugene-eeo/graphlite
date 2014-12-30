@@ -107,10 +107,10 @@ class Query(object):
         :param replace: Whether to replace the entire
             SQL query.
         """
-        smts = () if replace else self.sql
+        smt = (statement,)
         return Query(
             db=self.db,
-            sql=smts + (statement,),
+            sql=smt if replace else (self.sql + smt),
             params=self.params + params,
         )
 
