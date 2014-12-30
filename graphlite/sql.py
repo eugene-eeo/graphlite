@@ -1,7 +1,6 @@
 CREATE_TABLE = '''\
 CREATE TABLE IF NOT EXISTS %s
 (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
     src UNSIGNED INTEGER,
     dst UNSIGNED INTEGER
 )
@@ -93,7 +92,7 @@ def select_one(src, rel, dst):
     :param rel: The relation.
     :param dst: The destination node.
     """
-    smt = 'SELECT id FROM %s WHERE src = ? AND dst = ? LIMIT 1'
+    smt = 'SELECT src FROM %s WHERE src = ? AND dst = ? LIMIT 1'
     return smt % rel, (src, dst)
 
 
