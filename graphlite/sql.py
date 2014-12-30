@@ -135,6 +135,6 @@ def limit(lower, upper):
     :param upper: The upper bound.
     """
     offset = lower or 0
-    limit = (upper - offset) if upper else -1
-    smt = 'LIMIT %d OFFSET %d' % (limit, offset)
+    lim = (upper - offset) if upper else -1
+    smt = 'LIMIT %d OFFSET %d' % (lim, offset)
     return smt, ()

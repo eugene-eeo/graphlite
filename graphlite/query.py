@@ -4,8 +4,6 @@ import graphlite.sql as SQL
 
 
 class V(object):
-    __slots__ = ('src', 'rel', 'dst')
-
     """
     Create a new V object that represents an edge. This
     object is expected throughout the API where the
@@ -16,6 +14,9 @@ class V(object):
     :param rel: The relation.
     :param dst: The destination node.
     """
+
+    __slots__ = ('src', 'rel', 'dst')
+
     def __init__(self, src=None, rel=None, dst=None):
         self.src = src
         self.rel = rel
@@ -52,6 +53,9 @@ class V(object):
         return hash((self.src, self.rel, self.dst))
 
     def gen_query(self):
+        """
+        Generate an SQL query for the edge object.
+        """
         if self.dst is None:
             return SQL.forwards_relation(self.src, self.rel)
         return SQL.inverse_relation(self.dst, self.rel)
@@ -179,19 +183,19 @@ class Query(object):
         """
         return sum(1 for __ in self)
 
-    def __getitem__(self, sl):
+    def __getitem__(self, obj):
         """
         Only supports slicing operations, and returns
         an iterable with the slice taken into account.
 
-        :param sl: The slice object.
+        :param obj: The slice object.
         """
-        smt, params = SQL.limit(sl.start, sl.stop)
+        smt, params = SQL.limit(obj.start, obj.stop)
         return islice(
             self.derived(smt, params),
             None,
             None,
-            sl.step,
+            obj.step,
         )
 
     def to(self, datatype):
