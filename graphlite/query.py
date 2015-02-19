@@ -56,9 +56,10 @@ class V(object):
         """
         Generate an SQL query for the edge object.
         """
-        if self.dst is None:
-            return SQL.forwards_relation(self.src, self.rel)
-        return SQL.inverse_relation(self.dst, self.rel)
+        return (
+            SQL.forwards_relation(self.src, self.rel) if self.dst is None else
+            SQL.inverse_relation(self.dst, self.rel)
+            )
 
 
 class Query(object):
