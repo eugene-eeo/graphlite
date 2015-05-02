@@ -84,6 +84,17 @@ class Transaction(object):
         """
         return bool(self.ops)
 
+    def _perform_ops(self, cursor):
+        cursor.execute(SQL.begin)
+        for operation, edges in self.ops:
+            for edge in edges:
+                cursor.execute(*operation(
+                    src=edge.src,
+                    rel=edge.rel,
+                    dst=edge.dst,
+                ))
+
+
     def perform_ops(self):
         """
         Performs the stored operations on the database
@@ -93,14 +104,7 @@ class Transaction(object):
         """
         with self.db:
             with closing(self.db.cursor()) as cursor:
-                cursor.execute(SQL.begin)
-                for operation, edges in self.ops:
-                    for edge in edges:
-                        cursor.execute(*operation(
-                            src=edge.src,
-                            rel=edge.rel,
-                            dst=edge.dst,
-                        ))
+                self._perform_ops(cursor)
 
     def clear(self):
         """
