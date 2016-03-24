@@ -11,7 +11,7 @@ graph layer over SQLite. Similar to FlockDB, Graphlite only
 stores adjacency lists, but they can be queried in the style
 of normal graph databases, e.g. with traversals.
 
-.. code-block:: pycon
+.. code-block:: python
 
     >>> import graphlite as g
     >>> db = g.connect(':memory:', graphs=['knows'])
