@@ -12,12 +12,6 @@ INDEXES = (
 )
 
 
-difference = 'EXCEPT'
-intersection = 'INTERSECT'
-union = 'UNION'
-begin = 'BEGIN TRANSACTION'
-
-
 def store(src, rel, dst):
     """
     Returns an SQL statement to store an edge into

@@ -102,7 +102,7 @@ class Transaction(object):
         """
         with self.db:
             with closing(self.db.cursor()) as cursor:
-                cursor.execute(SQL.begin)
+                cursor.execute('BEGIN TRANSACTION')
                 self._perform_ops(cursor)
 
     def clear(self):

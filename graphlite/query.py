@@ -1,9 +1,13 @@
 from contextlib import closing
 from itertools import islice
+from collections import namedtuple
 import graphlite.sql as SQL
 
 
-class V(object):
+_V = namedtuple('V', ('src', 'rel', 'dst'))
+
+
+class V(_V):
     """
     Create a new V object that represents an edge. This
     object is expected throughout the API where the
@@ -15,16 +19,11 @@ class V(object):
     :param dst: The destination node.
     """
 
-    __slots__ = ('src', 'rel', 'dst')
-
-    def __init__(self, src=None, rel=None, dst=None):
-        self.src = src
-        self.rel = rel
-        self.dst = dst
+    def __new__(cls, src=None, rel=None, dst=None):
+        return _V.__new__(cls, src, rel, dst)
 
     def __getattr__(self, attr):
-        self.rel = attr
-        return self
+        return V(self.src, attr, self.dst)
 
     def __call__(self, dst):
         """
@@ -32,8 +31,7 @@ class V(object):
 
         :param dst: The destination node.
         """
-        self.dst = dst
-        return self
+        return V(self.src, self.rel, dst)
 
     def __repr__(self):
         return '(%s)-[%s]->(%s)' % (
@@ -41,16 +39,6 @@ class V(object):
             '*' if self.rel is None else ':%s' % self.rel,
             '*' if self.dst is None else self.dst,
         )
-
-    def __eq__(self, other):
-        if not isinstance(other, V):
-            return NotImplemented
-        return (self.src == other.src and
-                self.rel == other.rel and
-                self.dst == other.dst)
-
-    def __hash__(self):
-        return hash((self.src, self.rel, self.dst))
 
     def gen_query(self):
         """
@@ -108,10 +96,9 @@ class Query(object):
         :param replace: Whether to replace the entire
             SQL query.
         """
-        smt = (statement,)
         return Query(
             db=self.db,
-            sql=smt if replace else (self.sql + smt),
+            sql=(statement,) if replace else self.sql + (statement,),
             params=self.params + params,
         )
 
@@ -152,7 +139,7 @@ class Query(object):
         Intersect the current query with another one
         using an SQL INTERSECT.
         """
-        return self.derived(SQL.intersection)
+        return self.derived('INTERSECT')
 
     @property
     def difference(self):
@@ -163,7 +150,7 @@ class Query(object):
         implementation to
         :meth:`graphlite.query.Query.intersection`.
         """
-        return self.derived(SQL.difference)
+        return self.derived('EXCEPT')
 
     @property
     def union(self):
@@ -173,7 +160,7 @@ class Query(object):
         :meth:`graphlite.query.Query.intersection`
         method.
         """
-        return self.derived(SQL.union)
+        return self.derived('UNION')
 
     def count(self):
         """
