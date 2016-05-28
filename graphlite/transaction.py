@@ -115,10 +115,10 @@ class Transaction(object):
     def commit(self):
         """
         Commits the stored changes to the database.
-        Note that you `do not` have to call this
-        function if you used the transaction object
-        as a context manager. Note that a transaction
-        can only be committed once.
+        You `don't` have to call this function if
+        the transaction object is used as a context
+        manager. A transaction can only be committed
+        once.
         """
         try:
             with self.lock:
