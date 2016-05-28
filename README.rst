@@ -16,9 +16,9 @@ of normal graph databases, e.g. with traversals.
     >>> import graphlite as g
     >>> db = g.connect(':memory:', graphs=['knows'])
 
-    >>> with db.transaction():
+    >>> with db.transaction() as t:
     ...     for person in [2, 3]:
-    ...         db.store(g.V(1).knows(person))
+    ...         t.store(g.V(1).knows(person))
     ...
 
     >>> db.find(g.V(1).knows).to(list)

@@ -120,9 +120,7 @@ def compound_inv_query(query, rel, dst):
 def limit(lower, upper):
     """
     Returns a SQlite-compliant LIMIT statement that
-    takes the *start* and *stop* into account, also
-    taking into account the fact that these values are
-    lower and upper bounds.
+    takes the *lower* and *upper* bounds into account.
 
     :param lower: The lower bound.
     :param upper: The upper bound.
