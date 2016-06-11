@@ -75,15 +75,6 @@ class Transaction(object):
         self.clear()
         raise AbortSignal
 
-    @property
-    def defined(self):
-        """
-        Returns true if there are any internal
-        operations waiting to be performed when the
-        commit method is called.
-        """
-        return bool(self.ops)
-
     def _perform_ops(self, cursor):
         for operation, edges in self.ops:
             for edge in edges:
@@ -120,11 +111,11 @@ class Transaction(object):
         manager. A transaction can only be committed
         once.
         """
-        try:
-            with self.lock:
+        with self.lock:
+            try:
                 self.perform_ops()
-        finally:
-            self.clear()
+            finally:
+                self.clear()
 
     def __enter__(self):
         """
@@ -140,6 +131,6 @@ class Transaction(object):
         exceptions were raised and if operations were
         defined. Ignores ``AbortSignal``.
         """
-        if not traceback and self.defined:
+        if not traceback and self.ops:
             self.commit()
         return isinstance(value, AbortSignal)
