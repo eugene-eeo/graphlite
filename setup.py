@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='graphlite',
-    version='1.0.5',
+    version='2.0.0',
     packages=['graphlite'],
     description='embedded graph datastore',
 
