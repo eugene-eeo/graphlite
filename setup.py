@@ -7,7 +7,7 @@ setup(
     description='embedded graph datastore',
 
     author='Eugene Eeo',
-    author_email='packwolf58@gmail.com',
+    author_email='141bytes@gmail.com',
     url='https://github.com/eugene-eeo/graphlite',
     classifiers=[
         'License :: OSI Approved :: MIT License',
