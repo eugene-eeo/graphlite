@@ -51,12 +51,11 @@ class Graph(object):
             cursor.execute(*SQL.select_one(edge.src, edge.rel, edge.dst))
             return bool(cursor.fetchall())
 
-    @property
-    def find(self):
+    def find(self, edge_query):
         """
         Returns a Query object that acts on the graph.
         """
-        return Query(self.db)
+        return Query(self.db)(edge_query)
 
     def transaction(self):
         """

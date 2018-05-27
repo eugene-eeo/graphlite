@@ -184,7 +184,7 @@ class Query(object):
             None,
             None,
             obj.step,
-        )
+            )
 
     def to(self, datatype):
         """
