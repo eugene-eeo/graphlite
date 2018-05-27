@@ -1,6 +1,5 @@
 from contextlib import closing
 from sqlite3 import Connection
-from threading import Lock
 
 from graphlite.query import Query
 from graphlite.transaction import Transaction
@@ -16,12 +15,7 @@ class Graph(object):
     """
     def __init__(self, uri, graphs=()):
         self.uri = uri
-        self.db = Connection(
-            database=uri,
-            check_same_thread=False,
-            isolation_level=None,
-        )
-        self.lock = Lock()
+        self.db = Connection(database=uri)
         self.setup_sql(graphs)
 
     def setup_sql(self, graphs):
@@ -70,4 +64,4 @@ class Graph(object):
         operations, i.e. ``store``, ``delete`` must
         then be performed on the transaction object.
         """
-        return Transaction(self.db, self.lock)
+        return Transaction(self.db)

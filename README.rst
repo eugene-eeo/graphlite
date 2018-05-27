@@ -34,7 +34,6 @@ or one of the **dbm** implementations to store your data.
 Features
 --------
 
-- Thread-safe transactions with **threading.Lock**
 - Small, easy to learn API with around 100% coverage
 - Lazy generator based API when querying
 - Highly documented codebase

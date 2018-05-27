@@ -2,24 +2,6 @@ import pytest
 from graphlite import V
 from graphlite.transaction import AbortSignal
 from sqlite3 import OperationalError
-from threading import Thread
-
-
-def test_transaction_concurrency(graph):
-    stored = [V(1).knows(i) for i in range(5, 9)]
-
-    def store(value):
-        def callback():
-            with graph.transaction() as tr:
-                tr.store(value)
-        return callback
-
-    threads = [Thread(target=store(x)) for x in stored]
-    [thread.start() for thread in threads]
-    [thread.join() for thread in threads]
-
-    for item in stored:
-        assert item in graph
 
 
 def test_transaction_delete(graph):

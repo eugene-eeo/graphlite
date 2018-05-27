@@ -16,12 +16,10 @@ class Transaction(object):
     until the transaction is committed.
 
     :param db: An SQLite connection.
-    :param lock: A threading.Lock instance.
     """
 
-    def __init__(self, db, lock):
+    def __init__(self, db):
         self.db = db
-        self.lock = lock
         self.ops = []
 
     def store_many(self, edges):
@@ -87,9 +85,7 @@ class Transaction(object):
     def perform_ops(self):
         """
         Performs the stored operations on the database
-        connection. Only to be called when within a
-        lock and a database transaction by the
-        ``commit`` method.
+        connection.
         """
         with self.db:
             with closing(self.db.cursor()) as cursor:
@@ -111,11 +107,10 @@ class Transaction(object):
         manager. A transaction can only be committed
         once.
         """
-        with self.lock:
-            try:
-                self.perform_ops()
-            finally:
-                self.clear()
+        try:
+            self.perform_ops()
+        finally:
+            self.clear()
 
     def __enter__(self):
         """
