@@ -1,7 +1,7 @@
-.. image:: https://raw.github.com/eugene-eeo/graphlite/master/art/logo-400.png
-   :alt: Graphlite
+graphlite
+=========
 
-|Build| |Downloads|
+|Build|
 
 Graphlite is an MIT-licensed graph DB for Python.
 
@@ -49,5 +49,3 @@ To install Graphlite, simply::
 
 .. |Build| image:: https://img.shields.io/travis/eugene-eeo/graphlite.svg
    :target: https://travis-ci.org/eugene-eeo/graphlite/
-.. |Downloads| image:: https://img.shields.io/pypi/dm/graphlite.svg
-   :target: https://pypi.python.org/pypi/graphlite
